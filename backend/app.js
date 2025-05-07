@@ -10,6 +10,8 @@ const { ValidationError } = require('sequelize');
 const { environment } = require('./config');
 const isProduction = environment === 'production';
 
+const { restoreUser } = require('./utils/auth'); // ✅ Added
+
 const app = express();
 
 app.use(morgan('dev'));
@@ -24,38 +26,48 @@ app.use(
 
 app.use(
   csurf({
-    cookie: { secure: isProduction, sameSite: isProduction && "Lax", httpOnly: true }
+    cookie: {
+      secure: isProduction,
+      sameSite: isProduction && "Lax",
+      httpOnly: true
+    }
   })
 );
 
+// ✅ Add restoreUser middleware BEFORE routes
+app.use(restoreUser);
+
 const routes = require('./routes');
 app.use(routes);
+
+// Catch unhandled requests
 app.use((_req, _res, next) => {
-    const err = new Error("The requested resource couldn't be found.");
-    err.title = "Resource Not Found";
-    err.errors = ["The requested resource couldn't be found."];
-    err.status = 404;
-    next(err);
+  const err = new Error("The requested resource couldn't be found.");
+  err.title = "Resource Not Found";
+  err.errors = ["The requested resource couldn't be found."];
+  err.status = 404;
+  next(err);
 });
 
+// Handle Sequelize validation errors
 app.use((err, _req, _res, next) => {
-    //check if error is a sequelize error:
-    if (err instanceof ValidationError) {
-        err.errors = err.errors.map((e) => e.message);
-        err.title = 'Validation error';
-    }
-    next(err);
-})
+  if (err instanceof ValidationError) {
+    err.errors = err.errors.map((e) => e.message);
+    err.title = 'Validation error';
+  }
+  next(err);
+});
 
+// Final error formatter
 app.use((err, _req, res, _next) => {
-    res.status(err.status || 500);
-    console.error(err);
-    res.json({
-        title: err.title || 'Server Error',
-        message: err.message,
-        errors: err.errors,
-        stack: isProduction ? null : err.stack
-    });
+  res.status(err.status || 500);
+  console.error(err);
+  res.json({
+    title: err.title || 'Server Error',
+    message: err.message,
+    errors: err.errors,
+    stack: isProduction ? null : err.stack
+  });
 });
 
 module.exports = app;
