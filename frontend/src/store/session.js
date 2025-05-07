@@ -36,6 +36,14 @@ export const restoreUser = () => async (dispatch) => {
   return res;
 };
 
+// Thunk action for logout
+export const logout = () => async (dispatch) => {
+  await csrfFetch('/api/session', {
+    method: 'DELETE'
+  });
+  dispatch(removeUser());
+};
+
 const initialState = { user: null };
 
 // Reducer
