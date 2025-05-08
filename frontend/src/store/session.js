@@ -5,7 +5,7 @@ import { csrfFetch } from './csrf';
 const SET_USER = 'session/setUser';
 const REMOVE_USER = 'session/removeUser';
 
-// Action creators
+// working on Action creators
 const setUser = (user) => ({
   type: SET_USER,
   payload: user,
@@ -15,7 +15,7 @@ const removeUser = () => ({
   type: REMOVE_USER,
 });
 
-// Thunk action for login
+// working on  action for login
 export const login = (user) => async (dispatch) => {
   const { credential, password } = user;
   const res = await csrfFetch('/api/session', {
@@ -46,7 +46,7 @@ export const signup = (user) => async (dispatch) => {
 };
 
 
-// Thunk to restore session user
+// working on restore session user
 export const restoreUser = () => async (dispatch) => {
   const res = await csrfFetch('/api/session');
   const data = await res.json();
@@ -54,7 +54,7 @@ export const restoreUser = () => async (dispatch) => {
   return res;
 };
 
-// Thunk to logout
+// working on logout
 export const logout = () => async (dispatch) => {
   await csrfFetch('/api/session', { method: 'DELETE' });
   dispatch(removeUser());
