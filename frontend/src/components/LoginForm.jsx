@@ -17,7 +17,7 @@ function LoginForm() {
 
     try {
       await dispatch(login({ credential, password }));
-      // Optionally redirect or close modal here
+
     } catch (res) {
       if (res.status >= 400) {
         const data = await res.json();
