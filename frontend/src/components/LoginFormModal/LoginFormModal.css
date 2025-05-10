@@ -1,7 +1,7 @@
 /* frontend/src/components/LoginFormModal/LoginFormModal.css */
 
 .error {
-    color: red;
+    color: rgb(231, 28, 28);
     margin-top: 10px;
     font-size: 14px;
   }
