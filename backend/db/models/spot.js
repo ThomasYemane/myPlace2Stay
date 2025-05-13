@@ -4,9 +4,9 @@ const {
   DataTypes,
   Sequelize
 } = require('sequelize');
+
 module.exports = (sequelize) => {
   class Spot extends Model {
-  
     static associate(models) {
       // Spot belongs to User (Owner)
       Spot.belongsTo(models.User, { foreignKey: 'ownerId', as: 'Owner' });
@@ -121,13 +121,12 @@ module.exports = (sequelize) => {
       allowNull: false,
       validate: {
         min: {
-          args: 0,
+          args: [0.01],
           msg: 'Price must be a positive value'
         }
       }
     }
-    
-    }, {
+  }, {
     sequelize,
     modelName: 'Spot',
   });
