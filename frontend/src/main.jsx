@@ -3,12 +3,10 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import App from './App';
 import './index.css';
-import configureStore from './store';
+import store from './store'; // ✅ FIXED: import the configured store
 import * as sessionActions from './store/session';
 import { restoreCSRF, csrfFetch } from './store/csrf';
-import { Modal, ModalProvider } from './context/Modal'; // ✅ NEW
-
-const store = configureStore();
+import { Modal, ModalProvider } from './context/Modal';
 
 if (import.meta.env.MODE !== 'production') {
   restoreCSRF();
@@ -22,7 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <ModalProvider>
       <Provider store={store}>
         <App />
-        <Modal /> {/* ✅ NEW */}
+        <Modal />
       </Provider>
     </ModalProvider>
   </React.StrictMode>

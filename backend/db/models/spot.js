@@ -6,11 +6,7 @@ const {
 } = require('sequelize');
 module.exports = (sequelize) => {
   class Spot extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+  
     static associate(models) {
       // Spot belongs to User (Owner)
       Spot.belongsTo(models.User, { foreignKey: 'ownerId', as: 'Owner' });
@@ -29,11 +25,11 @@ module.exports = (sequelize) => {
   Spot.init({
     ownerId: {
       type: DataTypes.INTEGER,
-      allowNull: false, // Non-nullable
+      allowNull: false, 
     },
     address: {
       type: DataTypes.STRING,
-      allowNull: false, // Non-nullable
+      allowNull: false, 
       validate: {
         notEmpty: {
           msg: 'Address cannot be empty'
@@ -42,7 +38,7 @@ module.exports = (sequelize) => {
     },
     city: {
       type: DataTypes.STRING,
-      allowNull: false, // Non-nullable
+      allowNull: false,
       validate: {
         notEmpty: {
           msg: 'City cannot be empty'
@@ -51,7 +47,7 @@ module.exports = (sequelize) => {
     },
     state: {
       type: DataTypes.STRING,
-      allowNull: false, // Non-nullable
+      allowNull: false, 
       validate: {
         notEmpty: {
           msg: 'State cannot be empty'
@@ -60,7 +56,7 @@ module.exports = (sequelize) => {
     },
     country: {
       type: DataTypes.STRING,
-      allowNull: false, // Non-nullable
+      allowNull: false, 
       validate: {
         notEmpty: {
           msg: 'Country cannot be empty'
@@ -103,7 +99,7 @@ module.exports = (sequelize) => {
     },
     name: {
       type: DataTypes.STRING(50),
-      allowNull: false, // Non-nullable
+      allowNull: false, 
       validate: {
         len: {
           args: [1, 50],
@@ -113,7 +109,7 @@ module.exports = (sequelize) => {
     },
     description: {
       type: DataTypes.TEXT,
-      allowNull: false, // Non-nullable
+      allowNull: false, 
       validate: {
         notEmpty: {
           msg: 'Description cannot be empty'
@@ -121,18 +117,16 @@ module.exports = (sequelize) => {
       }
     },
     price: {
-      type: DataTypes.DECIMAL,
+      type: DataTypes.FLOAT,
       allowNull: false,
       validate: {
-        isDecimal: {
-          msg: 'Price must be a decimal number'
-        },
         min: {
           args: 0,
           msg: 'Price must be a positive value'
         }
       }
     }
+    
     }, {
     sequelize,
     modelName: 'Spot',

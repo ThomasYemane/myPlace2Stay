@@ -6,6 +6,9 @@ const { Op, Sequelize } = require('sequelize');
 const { handleValidationErrors } = require('../../utils/validation');
 const { validateReview } = require('../../utils/validation');
 const router = express.Router();
+router.post('/test', (req, res) => {
+  return res.json({ message: 'POST /api/spots/test reached!' });
+});
 const { Review, ReviewImage } = require('../../db/models');
 
 // Validate spot creation/update
