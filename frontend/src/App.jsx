@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import * as sessionActions from './store/session';
 import Navigation from './components/Navigation/Navigation';
-import SpotsIndex from './components/SpotsIndex'; // 👈 added
+import SpotsIndex from './components/SpotsIndex/SpotsIndex'; // ✅ Update path here
 
 function Layout() {
   const dispatch = useDispatch();
@@ -31,7 +31,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <SpotsIndex /> // 👈 updated here
+        element: <h1>Welcome!</h1> // ✅ still shows on root
+      },
+      {
+        path: '/spots',
+        element: <SpotsIndex /> // ✅ /spots shows the list
       }
     ]
   }

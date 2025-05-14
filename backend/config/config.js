@@ -1,10 +1,11 @@
-const config = require('./index');
+// backend/config/config.js
+const { dbFile } = require('./index'); // 🔁 grabs the dbFile only
 
 module.exports = {
   development: {
-    storage: config.dbFile,
-    dialect: "sqlite",
-    seederStorage: "sequelize",
+    storage: dbFile,
+    dialect: 'sqlite',
+    seederStorage: 'sequelize',
     logQueryParameters: true,
     typeValidation: true
   },
@@ -15,6 +16,8 @@ module.exports = {
     dialectOptions: {
       ssl: { require: true, rejectUnauthorized: false }
     },
-    define: { schema: process.env.SCHEMA }
+    define: {
+      schema: process.env.SCHEMA
+    }
   }
 };

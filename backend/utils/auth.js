@@ -1,6 +1,7 @@
 // backend/utils/auth.js
 const jwt = require('jsonwebtoken');
-const { jwtConfig } = require('../config');
+// backend/utils/auth.js
+const { jwtConfig } = require('../config'); // ✅ NOT '../config/config'
 const { User } = require('../db/models');
 
 const { secret, expiresIn } = jwtConfig;

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 require('dotenv').config();
 
-const { port } = require('../config');
+const { port } = require('../config'); // ✅ points to backend/config/index.js
 const app = require('../app');
 const db = require('../db/models');
 

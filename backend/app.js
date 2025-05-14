@@ -9,7 +9,7 @@ const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const routes = require('./routes');
 
-const { environment } = require('./config');
+const { environment } = require('./config/config');
 const isProduction = environment === 'production';
 
 const app = express();
