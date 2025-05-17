@@ -5,7 +5,8 @@ import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import * as sessionActions from './store/session';
 import Navigation from './components/Navigation/Navigation';
-import SpotsIndex from './components/SpotsIndex/SpotsIndex'; // ✅ Update path here
+import SpotsIndex from './components/SpotsIndex/SpotsIndex';
+import LoginFormPage from './components/LoginFormPage'; // ✅ Correct import
 
 function Layout() {
   const dispatch = useDispatch();
@@ -31,11 +32,15 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <h1>Welcome!</h1> // ✅ still shows on root
+        element: <h1>Welcome!</h1>
       },
       {
         path: '/spots',
-        element: <SpotsIndex /> // ✅ /spots shows the list
+        element: <SpotsIndex />
+      },
+      {
+        path: '/login',
+        element: <LoginFormPage /> // ✅ Route added here
       }
     ]
   }
