@@ -1,6 +1,6 @@
-// frontend/src/store/csrf.js
-
 import Cookies from "js-cookie";
+
+const baseUrl = import.meta.env.VITE_BACKEND_URL || "";
 
 export async function csrfFetch(url, options = {}) {
   options.method = options.method || "GET";
@@ -12,14 +12,13 @@ export async function csrfFetch(url, options = {}) {
     options.headers["XSRF-Token"] = Cookies.get("XSRF-TOKEN");
   }
 
-  const res = await window.fetch(url, options);
+  const res = await window.fetch(`${baseUrl}${url}`, options);
 
   if (res.status >= 400) throw res;
 
   return res;
 }
 
-// This will be used in development to set the CSRF token cookie
 export function restoreCSRF() {
   return csrfFetch("/api/csrf/restore");
 }
