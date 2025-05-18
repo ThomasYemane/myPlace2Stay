@@ -1,18 +1,19 @@
-// frontend/src/App.jsx
-
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import * as sessionActions from './store/session';
+import { restoreCSRF } from './store/csrf'; // ✅ Import this
 import Navigation from './components/Navigation/Navigation';
 import SpotsIndex from './components/SpotsIndex/SpotsIndex';
-import LoginFormPage from './components/LoginFormPage'; // ✅ Correct import
+import LoginFormPage from './components/LoginFormPage'; // ✅ Already imported
 
 function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    restoreCSRF(); // ✅ Ensure CSRF cookie is present before API calls
+
     dispatch(sessionActions.restoreUser()).then(() => {
       setIsLoaded(true);
     });
@@ -40,7 +41,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/login',
-        element: <LoginFormPage /> // ✅ Route added here
+        element: <LoginFormPage />
       }
     ]
   }
