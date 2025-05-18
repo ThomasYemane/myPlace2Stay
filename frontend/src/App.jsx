@@ -1,19 +1,20 @@
+// frontend/src/App.jsx
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import * as sessionActions from './store/session';
-import { restoreCSRF } from './store/csrf'; // ✅ Import this
+import { restoreCSRF } from './store/csrf';
 import Navigation from './components/Navigation/Navigation';
 import SpotsIndex from './components/SpotsIndex/SpotsIndex';
-import LoginFormPage from './components/LoginFormPage'; // ✅ Already imported
+import LoginFormPage from './components/LoginFormPage';
+import SignupFormModal from './components/SignupFormModal/SignupFormModal'; // ✅ Corrected import
 
 function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    restoreCSRF(); // ✅ Ensure CSRF cookie is present before API calls
-
+    restoreCSRF();
     dispatch(sessionActions.restoreUser()).then(() => {
       setIsLoaded(true);
     });
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: '/login',
         element: <LoginFormPage />
+      },
+      {
+        path: '/signup', // ✅ Route for signup
+        element: <SignupFormModal />
       }
     ]
   }
