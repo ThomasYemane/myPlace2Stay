@@ -55,4 +55,16 @@ app.use((err, _req, res, _next) => {
   });
 });
 
+const path = require('path');
+
+if (isProduction) {
+  // Serve static files from the React frontend's dist folder
+  app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+  // Serve index.html for any unmatched route (for React Router)
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
+  });
+}
+
 module.exports = app;
