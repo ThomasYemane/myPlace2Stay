@@ -42,4 +42,7 @@ function App() {
   return <RouterProvider router={router} />;
 }
 
+// ensure CSRF cookie is present
+
+
 export default App;
