@@ -19,12 +19,15 @@ function SignupFormModal() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (password === confirmPassword) {
-      setErrors({});
-      dispatch(
+  if (password === confirmPassword) {
+    setErrors({});
+    console.log("🔵 Signup initiated...");
+
+    try {
+      const res = await dispatch(
         sessionActions.signup({
           email,
           username,
@@ -32,18 +35,30 @@ function SignupFormModal() {
           lastName,
           password
         })
-      )
-        .then(closeModal)
-        .catch(async (res) => {
-          const data = await res.json();
-          if (data?.errors) setErrors(data.errors);
-        });
-    } else {
-      setErrors({
-        confirmPassword: "Confirm Password field must match Password"
-      });
+      );
+      console.log("✅ Signup successful:", res);
+      closeModal();
+    } catch (res) {
+      console.log("❌ Signup failed:", res);
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        data = { errors: ['Signup failed unexpectedly.'] };
+      }
+      if (data?.errors) {
+        console.log("🪵 Server errors:", data.errors);
+        setErrors(data.errors);
+      }
     }
-  };
+  } else {
+    console.log("⚠️ Passwords do not match.");
+    setErrors({
+      confirmPassword: "Confirm Password field must match Password"
+    });
+  }
+};
+
 
   return (
     <>
