@@ -40,7 +40,7 @@ const router = createBrowserRouter([
 
 function App() {
   return <RouterProvider router={router} />;
-};
+}
 
 // ensure CSRF cookie is present
 
