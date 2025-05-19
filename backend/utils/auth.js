@@ -1,11 +1,10 @@
 // backend/utils/auth.js
 const jwt = require('jsonwebtoken');
-const jwtConfig = require('../config/jwt'); // ✅ Pointing directly to jwt.js
+const { jwtConfig } = require('../config');
 const { User } = require('../db/models');
 
 const { secret, expiresIn } = jwtConfig;
 
-// Sends a JWT Cookie
 const setTokenCookie = (res, user) => {
   const safeUser = {
     id: user.id,
@@ -15,19 +14,17 @@ const setTokenCookie = (res, user) => {
     lastName: user.lastName
   };
 
-  const token = jwt.sign(
-    { data: safeUser },
-    secret,
-    { expiresIn: parseInt(expiresIn) }
-  );
+  const token = jwt.sign({ data: safeUser }, secret, {
+    expiresIn: parseInt(expiresIn)
+  });
 
-  const isProduction = process.env.NODE_ENV === "production";
+  const isProduction = process.env.NODE_ENV === 'production';
 
   res.cookie('token', token, {
     maxAge: expiresIn * 1000,
     httpOnly: true,
     secure: isProduction,
-    sameSite: isProduction && "Lax"
+    sameSite: isProduction && 'Lax'
   });
 
   return token;
@@ -47,7 +44,7 @@ const restoreUser = (req, res, next) => {
           include: ['email', 'createdAt', 'updatedAt']
         }
       });
-    } catch (e) {
+    } catch {
       res.clearCookie('token');
       return next();
     }
