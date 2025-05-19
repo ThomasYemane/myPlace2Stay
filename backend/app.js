@@ -1,4 +1,3 @@
-// backend/app.js
 
 const express = require('express');
 require('express-async-errors');
@@ -18,7 +17,7 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(express.json());
 
-// Security Middleware
+
 if (!isProduction) {
   app.use(cors());
 }
@@ -33,10 +32,10 @@ app.use(
   })
 );
 
-// Routes
+
 app.use(routes);
 
-// Error handling middleware for unhandled requests
+
 app.use((_req, _res, next) => {
   const err = new Error("The requested resource couldn't be found.");
   err.title = "Resource Not Found";
@@ -45,7 +44,7 @@ app.use((_req, _res, next) => {
   next(err);
 });
 
-// General error handler
+
 app.use((err, _req, res, _next) => {
   res.status(err.status || 500);
   console.error(err);
@@ -56,7 +55,7 @@ app.use((err, _req, res, _next) => {
   });
 });
 
-// Serve frontend static files in production
+
 const path = require('path');
 
 if (isProduction) {
@@ -66,6 +65,6 @@ if (isProduction) {
     res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
   });
 }
-// Triggering a deploy to reset DB
+
 
 module.exports = app;

@@ -8,17 +8,14 @@ const reviewImagesRouter = require('./review-images');
 const bookingsRouter = require('./bookings.js');
 const { restoreUser } = require("../../utils/auth.js");
 
-// 🔒 CSRF Restore Route (must come first)
 router.get('/csrf/restore', (req, res) => {
   const csrfToken = req.csrfToken();
   res.cookie('XSRF-TOKEN', csrfToken);
   res.status(200).json({ 'XSRF-Token': csrfToken });
 });
 
-// 🔐 Restore user middleware
 router.use(restoreUser);
 
-// ✅ All API routers
 router.use('/session', sessionRouter);
 router.use('/users', usersRouter);
 router.use('/spots', spotsRouter);

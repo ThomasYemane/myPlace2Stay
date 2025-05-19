@@ -2,13 +2,13 @@
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA; // { schema: 'airbnb_schema' }
+  options.schema = process.env.SCHEMA; 
 }
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    options.tableName = 'SpotImages'; // 🔥 add tableName inside options
-    await queryInterface.createTable(options, {  // 🔥 pass options FIRST
+    options.tableName = 'SpotImages'; 
+    await queryInterface.createTable(options, { 
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -36,7 +36,7 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    options.tableName = 'SpotImages'; // 🔥 again, specify in options
+    options.tableName = 'SpotImages'; 
     await queryInterface.dropTable(options);
   }
 };

@@ -1,4 +1,3 @@
-// frontend/src/components/Navigation/ProfileButton.jsx
 
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';

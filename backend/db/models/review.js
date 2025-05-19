@@ -5,13 +5,11 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Review extends Model {
     static associate(models) {
-      // Review belongs to a User
+
       Review.belongsTo(models.User, { foreignKey: 'userId' });
 
-      // Review belongs to a Spot
       Review.belongsTo(models.Spot, { foreignKey: 'spotId' });
 
-      // Review has many ReviewImages with cascade delete
       Review.hasMany(models.ReviewImage, {
         foreignKey: 'reviewId',
         onDelete: 'CASCADE',

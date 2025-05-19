@@ -1,4 +1,3 @@
-// frontend/src/components/SpotsIndex/SpotsIndex.jsx
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllSpots } from '../../store/spots';
@@ -6,13 +5,12 @@ import { fetchAllSpots } from '../../store/spots';
 function SpotsIndex() {
   const dispatch = useDispatch();
   const spots = useSelector(state => state.spots);
-  const spotsArr = Object.values(spots); // converts object into array
+  const spotsArr = Object.values(spots); 
 
   useEffect(() => {
     dispatch(fetchAllSpots());
   }, [dispatch]);
 
-  // ✅ Better loading check
   if (!spots || Object.keys(spots).length === 0) {
     return <h2>Loading...</h2>;
   }

@@ -1,4 +1,3 @@
-// frontend/src/context/ModalContext.jsx
 
 import { useRef, useState, createContext, useContext } from 'react';
 

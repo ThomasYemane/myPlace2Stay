@@ -2,7 +2,7 @@
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA; // define your schema
+  options.schema = process.env.SCHEMA; 
 }
 
 /** @type {import('sequelize-cli').Migration} */
@@ -20,8 +20,8 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: {
-            tableName: 'Users',    // ✅ wrapped inside an object
-            schema: options.schema // ✅ schema is specified!
+            tableName: 'Users',   
+            schema: options.schema 
           },
           key: 'id'
         },
@@ -73,16 +73,16 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       }
-    }, options);  // ✅ Don't forget to pass options here too
+    }, options); 
   },
   async down(queryInterface, Sequelize) {
     options.tableName = 'Bookings';
-    await queryInterface.dropTable(options);  // First drop Bookings (child)
+    await queryInterface.dropTable(options);  
 
     options.tableName = 'SpotImages';
-    await queryInterface.dropTable(options);  // Then drop SpotImages (another child)
+    await queryInterface.dropTable(options);  
 
     options.tableName = 'Spots';
-    await queryInterface.dropTable(options);  // Then drop Spots (parent)
+    await queryInterface.dropTable(options); 
   }
 };

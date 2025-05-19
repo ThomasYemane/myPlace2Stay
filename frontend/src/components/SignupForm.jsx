@@ -1,4 +1,3 @@
-// frontend/src/components/SignupForm.jsx
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { signup } from '../store/session';

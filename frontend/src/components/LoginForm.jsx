@@ -1,7 +1,5 @@
-// frontend/src/components/LoginForm.jsx
 
 import { useState } from 'react';
-// import React, { useState } from 'react'; i dont need this for now so i commented it
 import { useDispatch } from 'react-redux';
 import { login } from '../store/session';
 

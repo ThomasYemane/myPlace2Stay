@@ -1,4 +1,3 @@
-// frontend/src/components/LoginFormModal/LoginFormModal.jsx
 
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -23,7 +22,7 @@ function LoginFormModal() {
         try {
           const data = await res.json();
           if (data?.errors) {
-            setErrors(data.errors); // set as array
+            setErrors(data.errors); 
           } else {
             setErrors(['Login failed. Please try again.']);
           }

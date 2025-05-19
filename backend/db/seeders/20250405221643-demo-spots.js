@@ -2,14 +2,14 @@
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA; // Set schema if in production
+  options.schema = process.env.SCHEMA; 
 }
-options.tableName = 'Spots'; // Always define the table at the top
+options.tableName = 'Spots'; 
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // Find Demo-lition user (assuming they exist from demo-user seeder)
+
     const demoUser = await queryInterface.sequelize.query(
       `SELECT id FROM "${options.schema ? options.schema + '"."' : ''}Users" WHERE username = 'Demo-lition' LIMIT 1;`,
       { type: Sequelize.QueryTypes.SELECT }
@@ -20,7 +20,6 @@ module.exports = {
       throw new Error('Demo user not found, cannot seed Spots.');
     }
 
-    // Insert demo spots
     await queryInterface.bulkInsert(options, [
       {
         ownerId: demoUserId,
@@ -68,7 +67,7 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    options.tableName = 'Spots'; // now safe to delete Spots
+    options.tableName = 'Spots'; 
     await queryInterface.bulkDelete(options, null, {});
   }
 };

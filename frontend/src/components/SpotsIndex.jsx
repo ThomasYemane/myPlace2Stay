@@ -1,4 +1,3 @@
-// frontend/src/components/SpotsIndex.jsx
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,7 +6,7 @@ import { fetchAllSpots } from '../store/spots';
 function SpotsIndex() {
   const dispatch = useDispatch();
 
-  // Get all spots from Redux state
+
   const spots = useSelector((state) => Object.values(state.spots));
 
   useEffect(() => {

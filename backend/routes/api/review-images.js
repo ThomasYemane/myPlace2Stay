@@ -4,15 +4,15 @@ const { requireAuth } = require('../../utils/auth');
 
 const router = express.Router();
 
-// DELETE /api/review-images/:imageId
+
 router.delete('/:imageId', requireAuth, async (req, res) => {
   const { imageId } = req.params;
 
-  // Find the image and include the associated review for ownership check
+
   const image = await ReviewImage.findByPk(imageId, {
     include: {
       model: Review,
-      attributes: ['userId'] // Needed to check if the current user owns the review
+      attributes: ['userId'] 
     }
   });
 

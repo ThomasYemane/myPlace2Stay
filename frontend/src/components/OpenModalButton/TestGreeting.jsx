@@ -1,4 +1,3 @@
-// frontend/src/components/OpenModalButton/TestGreeting.jsx
 
 import OpenModalButton from './OpenModalButton';
 

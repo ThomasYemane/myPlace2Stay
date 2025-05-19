@@ -1,5 +1,4 @@
-// backend/config/config.js
-const { dbFile } = require('./index'); // 🔁 grabs the dbFile only
+const { dbFile } = require('./index'); 
 
 module.exports = {
   development: {

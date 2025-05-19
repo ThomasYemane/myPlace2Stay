@@ -20,7 +20,7 @@ module.exports = (sequelize) => {
   SpotImage.init({
     spotId: {
       type: DataTypes.INTEGER,
-      allowNull: false, // Non-nullable
+      allowNull: false, 
       validate: {
         isInt: {
           msg: 'Spot ID must be an integer'
@@ -29,7 +29,7 @@ module.exports = (sequelize) => {
     },
     url: {
       type: DataTypes.STRING,
-      allowNull: false, // Non-nullable
+      allowNull: false, 
       validate: {
         notEmpty: {
           msg: 'URL cannot be empty'
@@ -41,8 +41,8 @@ module.exports = (sequelize) => {
     },
     preview: {
       type: DataTypes.BOOLEAN,
-      allowNull: false, // Non-nullable
-      defaultValue: false, // Default to false
+      allowNull: false, 
+      defaultValue: false, 
     }
   }, {
     sequelize,

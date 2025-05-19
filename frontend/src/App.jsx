@@ -7,7 +7,7 @@ import { restoreCSRF } from './store/csrf';
 import Navigation from './components/Navigation/Navigation';
 import SpotsIndex from './components/SpotsIndex/SpotsIndex';
 import LoginFormPage from './components/LoginFormPage';
-import SignupForm from './components/SignupForm'; // ✅ Corrected import
+import SignupForm from './components/SignupForm'; 
 
 function Layout() {
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
       { path: '/', element: <h1>Welcome!</h1> },
       { path: '/spots', element: <SpotsIndex /> },
       { path: '/login', element: <LoginFormPage /> },
-      { path: '/signup', element: <SignupForm /> } // ✅ Uses SignupForm.jsx
+      { path: '/signup', element: <SignupForm /> } 
     ]
   }
 ]);

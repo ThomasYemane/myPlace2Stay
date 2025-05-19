@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import App from './App';
 import './index.css';
-import store from './store'; // ✅ FIXED: import the configured store
+import store from './store'; 
 import * as sessionActions from './store/session';
 import { restoreCSRF, csrfFetch } from './store/csrf';
 import { Modal, ModalProvider } from './context/Modal';

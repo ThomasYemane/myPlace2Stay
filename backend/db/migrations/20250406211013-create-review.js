@@ -2,7 +2,7 @@
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA; // Enables schema support in production
+  options.schema = process.env.SCHEMA; 
 }
 
 module.exports = {
