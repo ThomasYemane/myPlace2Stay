@@ -36,7 +36,7 @@ app.use(
 // Routes
 app.use(routes);
 
-// Error handling middleware
+// Error handling middleware for unhandled requests
 app.use((_req, _res, next) => {
   const err = new Error("The requested resource couldn't be found.");
   err.title = "Resource Not Found";
@@ -45,6 +45,7 @@ app.use((_req, _res, next) => {
   next(err);
 });
 
+// General error handler
 app.use((err, _req, res, _next) => {
   res.status(err.status || 500);
   console.error(err);
@@ -55,13 +56,12 @@ app.use((err, _req, res, _next) => {
   });
 });
 
+// Serve frontend static files in production
 const path = require('path');
 
 if (isProduction) {
-  // Serve static files from the React frontend's dist folder
   app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
-  // Serve index.html for any unmatched route (for React Router)
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
   });
