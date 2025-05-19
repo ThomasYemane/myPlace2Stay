@@ -66,5 +66,6 @@ if (isProduction) {
     res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
   });
 }
+// Triggering a deploy to reset DB
 
 module.exports = app;
