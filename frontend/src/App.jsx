@@ -1,26 +1,22 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+import LoginFormPage from './components/LoginFormPage/LoginFormPage';
+import SignupFormPage from './components/SignupFormPage/SignupFormPage';
 import * as sessionActions from './store/session';
-import { restoreCSRF } from './store/csrf';
-
-import Navigation from './components/Navigation/Navigation';
-import SpotsIndex from './components/SpotsIndex/SpotsIndex';
-import LoginFormPage from './components/LoginFormPage';
-import SignupForm from './components/SignupForm'; 
 
 function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    restoreCSRF();
-    dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
+    dispatch(sessionActions.restoreUser()).then(() => {
+      setIsLoaded(true)
+    });
   }, [dispatch]);
 
   return (
     <>
-      <Navigation isLoaded={isLoaded} />
       {isLoaded && <Outlet />}
     </>
   );
@@ -30,10 +26,18 @@ const router = createBrowserRouter([
   {
     element: <Layout />,
     children: [
-      { path: '/', element: <h1>Welcome!</h1> },
-      { path: '/spots', element: <SpotsIndex /> },
-      { path: '/login', element: <LoginFormPage /> },
-      { path: '/signup', element: <SignupForm /> } 
+      {
+        path: '/',
+        element: <h1>Welcome!</h1>
+      },
+      {
+        path: '/login',
+        element: <LoginFormPage />
+      },
+      {
+        path: "/signup",
+        element: <SignupFormPage />
+      }
     ]
   }
 ]);
@@ -41,8 +45,5 @@ const router = createBrowserRouter([
 function App() {
   return <RouterProvider router={router} />;
 }
-
-// ensure CSRF cookie is present
-
 
 export default App;

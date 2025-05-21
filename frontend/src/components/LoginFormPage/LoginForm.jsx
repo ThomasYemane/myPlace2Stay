@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { login } from '../store/session';
+import { login } from '../../store/session';
 
 function LoginForm() {
   const dispatch = useDispatch();

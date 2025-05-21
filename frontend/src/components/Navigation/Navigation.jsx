@@ -1,23 +1,51 @@
-import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import ProfileButton from './ProfileButton';
-import './Navigation.css';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { Outlet, createBrowserRouter, RouterProvider } from 'react-router-dom';
+import LoginFormPage from './components/LoginFormPage/LoginFormPage';
+import SignupFormPage from './components/SignupFormPage/SignupFormPage';
+import Navigation from './components/Navigation';
+import * as sessionActions from './store/session';
 
-function Navigation({ isLoaded }) {
-  const sessionUser = useSelector((state) => state.session.user);
+function Layout() {
+  const dispatch = useDispatch();
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    dispatch(sessionActions.restoreUser()).then(() => {
+      setIsLoaded(true)
+    });
+  }, [dispatch]);
 
   return (
-    <ul>
-      <li>
-        <NavLink to="/">Home</NavLink>
-      </li>
-      {isLoaded && (
-        <li>
-          <ProfileButton user={sessionUser} />
-        </li>
-      )}
-    </ul>
+    <>
+      <Navigation isLoaded={isLoaded} />
+      {isLoaded && <Outlet />}
+    </>
   );
 }
 
-export default Navigation;
+const router = createBrowserRouter([
+  {
+    element: <Layout />,
+    children: [
+      {
+        path: '/',
+        element: <h1>Welcome!</h1>
+      },
+      {
+        path: "login",
+        element: <LoginFormPage />
+      },
+      {
+        path: "signup",
+        element: <SignupFormPage />
+      }
+    ]
+  }
+]);
+
+function App() {
+  return <RouterProvider router={router} />;
+}
+
+export default App;

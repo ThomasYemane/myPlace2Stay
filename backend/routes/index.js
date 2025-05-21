@@ -5,9 +5,8 @@ const apiRouter = require('./api');
 
 router.use('/api', apiRouter);
 
-
 if (process.env.NODE_ENV === 'production') {
-
+  const path = require('path');
   router.get('/', (req, res) => {
     res.cookie('XSRF-TOKEN', req.csrfToken());
     return res.sendFile(
@@ -15,9 +14,7 @@ if (process.env.NODE_ENV === 'production') {
     );
   });
 
-
   router.use(express.static(path.resolve("../frontend/dist")));
-
 
   router.get(/^(?!\/?api).*/, (req, res) => {
     res.cookie('XSRF-TOKEN', req.csrfToken());
@@ -25,13 +22,10 @@ if (process.env.NODE_ENV === 'production') {
       path.resolve(__dirname, '../../frontend', 'dist', 'index.html')
     );
   });
-}
-
-
-if (process.env.NODE_ENV !== 'production') {
+}else{
   router.get('/api/csrf/restore', (req, res) => {
     res.cookie('XSRF-TOKEN', req.csrfToken());
-    return res.json({ 'XSRF-Token': req.csrfToken() });
+    return res.json({});
   });
 }
 

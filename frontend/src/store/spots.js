@@ -1,34 +1,38 @@
-
+// Action Type
 const SET_SPOTS = 'spots/setSpots';
 
+// Action Creator
+const setSpots = (spots) => {
+  const spotsObj = {};
+  spots.forEach(spot => {
+    spotsObj[spot.id] = spot;
+  });
+  return {
+    type: SET_SPOTS,
+    spots: spotsObj
+  };
+};
 
-const setSpots = (spots) => ({
-  type: SET_SPOTS,
-  spots
-});
-
-
+// Thunk - Fetch All Spots
 export const fetchAllSpots = () => async (dispatch) => {
-  const res = await fetch('/api/spots');
-  if (res.ok) {
-    const data = await res.json();
-    dispatch(setSpots(data.Spots)); 
-  } else {
-
-    console.error('Failed to fetch spots');
+  try {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/spots`);
+    if (res.ok) {
+      const data = await res.json();
+      dispatch(setSpots(data.Spots)); // extract the 'Spots' array
+    } else {
+      console.error('Failed to fetch spots');
+    }
+  } catch (error) {
+    console.error('Error fetching spots:', error);
   }
 };
 
-
+// Reducer
 const spotsReducer = (state = {}, action) => {
   switch (action.type) {
-    case SET_SPOTS: {
-      const newState = {};
-      action.spots.forEach(spot => {
-        newState[spot.id] = spot;
-      });
-      return newState;
-    }
+    case SET_SPOTS:
+      return action.spots;
     default:
       return state;
   }
