@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
-import LoginFormPage from './components/LoginFormPage/LoginFormPage';
-import SignupFormPage from './components/SignupFormPage/SignupFormPage';
+import Navigation from './components/Navigation/Navigation';
+import Spot from './components/SpotsIndex/SpotsIndex'
 import * as sessionActions from './store/session';
+import './App.css'
 
 function Layout() {
   const dispatch = useDispatch();
@@ -17,10 +18,12 @@ function Layout() {
 
   return (
     <>
+      <Navigation isLoaded={isLoaded} />
       {isLoaded && <Outlet />}
     </>
   );
 }
+
 
 const router = createBrowserRouter([
   {
@@ -28,15 +31,15 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <h1>Welcome!</h1>
-      },
-      {
-        path: '/login',
-        element: <LoginFormPage />
-      },
-      {
-        path: "/signup",
-        element: <SignupFormPage />
+        element: (<><div id='main'>
+                        <div id='logo'>
+                            <h1>AirB&B</h1>
+                          </div>
+                        <div id='spot'>
+                            <Spot id="spot"/>
+                        </div>
+                      </div>
+                  </>)
       }
     ]
   }
@@ -47,6 +50,3 @@ function App() {
 }
 
 export default App;
-//App is not workign now
-// revising backend
-//

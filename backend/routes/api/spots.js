@@ -44,7 +44,7 @@ router.get('/', validateQueryFilters, async (req, res) => {
   const spots = await Spot.findAll({
     include: [
       { model: Review, attributes: [] },
-      { model: SpotImage, attributes: ['url', 'preview'], required: false }
+      { model: SpotImage, attributes: [['url', 'original'], ['url', 'thumbnail'], 'preview'], required: false }
     ],
     attributes: {
       include: [
@@ -59,7 +59,7 @@ router.get('/', validateQueryFilters, async (req, res) => {
 
   const formattedSpots = spots.map(spot => {
     const spotData = spot.toJSON();
-    const previewImage = spotData.SpotImages?.find(img => img.preview)?.url || null;
+    const previewImage = spotData.SpotImages?.find(img => img.preview)?.original || null;
 
     return {
       ...spotData,
