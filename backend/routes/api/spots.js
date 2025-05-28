@@ -55,7 +55,7 @@ router.get('/', validateQueryFilters, async (req, res) => {
     limit,
     offset,
     subQuery: false
-  });
+  }); 
 
   const formattedSpots = spots.map(spot => {
     const spotData = spot.toJSON();
