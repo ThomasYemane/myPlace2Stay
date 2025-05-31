@@ -35,4 +35,12 @@ form {
   button:hover {
     background-color: #005fa3;
   }
+
+.submitButton:disabled,
+.submitButton[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #635d5d;
+}
+  
   

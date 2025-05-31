@@ -1,8 +1,8 @@
 #logo {
 	font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-	font-size: 50px;
+	font-size: 3vw;
 	text-align: center;
 	line-height: 1;
-	margin-left: 10%;
-	color: green;
+	margin-left: 7%;
+	color: rgb(230, 93, 116);
 }

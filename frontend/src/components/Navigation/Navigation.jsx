@@ -8,16 +8,16 @@ function Navigation({ isLoaded }) {
   useDispatch();
 
   return (
-    <ul>
-      <li>
-        <NavLink to="/">Home</NavLink>
-      </li>
-      {isLoaded && (
-        <li>
-          <ProfileButton user={sessionUser} />
-        </li>
-      )}
-    </ul>
+    <div className='header'>
+       <div className='left'>
+                 <NavLink to="/"><img className='logo' src='/logo.png'/></NavLink>
+        </div>
+        <div className='right'>
+                {isLoaded && (
+                  <ProfileButton user={sessionUser} />
+                  )}
+          </div>
+    </div>
   );
 }
 

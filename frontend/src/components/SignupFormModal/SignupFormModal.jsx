@@ -17,14 +17,13 @@ function SignupFormModal() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true)
 
   const handleSubmit = async (e) => {
   e.preventDefault();
 
   if (password === confirmPassword) {
     setErrors({});
-    console.log("🔵 Signup initiated...");
-
     try {
       const res = await dispatch(
         sessionActions.signup({
@@ -35,10 +34,8 @@ function SignupFormModal() {
           password
         })
       );
-      console.log("✅ Signup successful:", res);
       closeModal();
     } catch (res) {
-      console.log("❌ Signup failed:", res);
       let data;
       try {
         data = await res.json();
@@ -46,12 +43,10 @@ function SignupFormModal() {
         data = { errors: ['Signup failed unexpectedly.'] };
       }
       if (data?.errors) {
-        console.log("🪵 Server errors:", data.errors);
         setErrors(data.errors);
       }
     }
   } else {
-    console.log("⚠️ Passwords do not match.");
     setErrors({
       confirmPassword: "Confirm Password field must match Password"
     });
@@ -65,41 +60,47 @@ function SignupFormModal() {
       <form onSubmit={handleSubmit}>
         <label>
           Email
-          <input value={email} onChange={e => setEmail(e.target.value)} required />
+          <input value={email} onChange={e => {setEmail(e.target.value); setIsButtonDisabled(email.length==0 || username.length<4 || firstName.length==0 ||
+      lastName.length==0 || password.length<6)}} required />
         </label>
         {errors.email && <p>{errors.email}</p>}
 
         <label>
           Username
-          <input value={username} onChange={e => setUsername(e.target.value)} required />
+          <input value={username} onChange={e => {setUsername(e.target.value); setIsButtonDisabled(email.length==0 || username.length<4 || firstName.length==0 ||
+      lastName.length==0 || password.length<6)}} required />
         </label>
         {errors.username && <p>{errors.username}</p>}
 
         <label>
           First Name
-          <input value={firstName} onChange={e => setFirstName(e.target.value)} required />
+          <input value={firstName} onChange={e => {setFirstName(e.target.value); setIsButtonDisabled(email.length==0 || username.length<4 || firstName.length==0 ||
+      lastName.length==0 || password.length<6)}} required />
         </label>
         {errors.firstName && <p>{errors.firstName}</p>}
 
         <label>
           Last Name
-          <input value={lastName} onChange={e => setLastName(e.target.value)} required />
+          <input value={lastName} onChange={e => {setLastName(e.target.value); setIsButtonDisabled(email.length==0 || username.length<4 || firstName.length==0 ||
+      lastName.length==0 || password.length<6)}} required />
         </label>
         {errors.lastName && <p>{errors.lastName}</p>}
 
         <label>
           Password
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+          <input type="password" value={password} onChange={e => {setPassword(e.target.value); setIsButtonDisabled(email.length==0 || username.length<4 || firstName.length==0 ||
+      lastName.length==0 || password.length<6)}} required />
         </label>
         {errors.password && <p>{errors.password}</p>}
 
         <label>
           Confirm Password
-          <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} required />
+          <input type="password" value={confirmPassword} onChange={e => {setConfirmPassword(e.target.value); setIsButtonDisabled(email.length==0 || username.length<4 || firstName.length==0 ||
+      lastName.length==0 || password.length<6)}} required />
         </label>
         {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
 
-        <button type="submit">Sign Up</button>
+        <button className='submitButton' disabled={isButtonDisabled} type="submit">Sign Up</button>
       </form>
     </>
   );

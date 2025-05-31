@@ -4,4 +4,11 @@
     margin-top: 10px;
     font-size: 14px;
   }
+
+.submitButton:disabled,
+.submitButton[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #635d5d;
+}
   

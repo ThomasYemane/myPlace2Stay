@@ -2,24 +2,26 @@ import { useState } from 'react';
 import * as sessionActions from '../../store/session';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
-import './LoginFormModal';
+import './LoginFormModal.css';
+
 
 function LoginFormModal() {
   const dispatch = useDispatch();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({});
+  const [error, setError] = useState("");
   const { closeModal } = useModal();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true)
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setErrors({});
+    setError("");
     return dispatch(sessionActions.login({ credential, password }))
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) {
-          setErrors(data.errors);
+          setError(data.errors);
         }
       });
   };
@@ -33,7 +35,7 @@ function LoginFormModal() {
           <input
             type="text"
             value={credential}
-            onChange={(e) => setCredential(e.target.value)}
+            onChange={(e) => {setCredential(e.target.value); setIsButtonDisabled(credential.length<4 || password.length<6)}}
             required
           />
         </label>
@@ -42,14 +44,13 @@ function LoginFormModal() {
           <input
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {setPassword(e.target.value); setIsButtonDisabled(credential.length<4 || password.length<6)}}
             required
           />
-        </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
+        </label> {error && (
+          <p>{error}</p>
         )}
-        <button type="submit">Log In</button>
+        <button className='submitButton' disabled={isButtonDisabled} type="submit">Log In</button>
       </form>
     </>
   );
