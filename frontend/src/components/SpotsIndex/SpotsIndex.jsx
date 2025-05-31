@@ -13,10 +13,8 @@ function SpotsIndex() {
   const navigate = useNavigate();
   const spotRef = useRef(null);
 
-  const handleClick = (e) => {
-    e.preventDefault();
-    alert(e.target.id)
-    navigate('/spot/'+e.target.id);
+  const handleClick = (id) => {
+    navigate('/spot/'+id);
   };
 
   useEffect(() => {
@@ -32,7 +30,7 @@ function SpotsIndex() {
       <h1>All Spots</h1>
         <div className="container">
         {spotsArr.map(spot => (
-          <div key={spot.id} ref={spotRef} id={spot.id} onClick={handleClick}>
+          <div key={spot.id} ref={spotRef} id={spot.id} onClick={()=>handleClick(spot.id)}>
             <h3>{spot.name}</h3>
             {spot.previewImage && (
               <img  id={spot.id}  src={spot.previewImage} alt={spot.name} width="200"/>

@@ -1,25 +1,19 @@
-.image-gallery {
-    position: relative;
-    background-color: transparent;
+.callout {
+  position: fixed;
+  bottom: 35px;
+  right: 20px;
+  margin-left: 20px;
+  max-width: 300px;
 }
 
-.image-gallery-slide img {
-    height: 30vw;
-    color: #fff;
-    justify-content: cente
+.callout-container {
+  padding: 15px;
+  background-color: #ccc;
+  color: black
 }
 
-
-.image-gallery-thumbnails-wrapper .image-gallery-slide img{
- justify-content: center;
-}
-
-.image-gallery-thumbnails-container{
-    background-color: transparent;
-    width: 43%;
-    padding-top: 0px;
-    margin-left: 27%;
-    height: 10%;
-    bottom: 0;
-    
+p{
+    color:black;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }

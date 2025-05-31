@@ -4,6 +4,9 @@ import { createBrowserRouter, RouterProvider, Outlet, useParams } from 'react-ro
 import Navigation from './components/Navigation/Navigation';
 import Spot from './components/SpotsIndex/SpotsIndex';
 import SpotDetails from './components/SpotsIndex/SpotDetails';
+import UpdateSpot from './components/SpotsIndex/UpdateSpot';
+import CreateSpot from './components/SpotsIndex/CreateSpot';
+import ManageSpots from './components/SpotsIndex/ManageSpots';
 import * as sessionActions from './store/session';
 import './App.css';
 
@@ -46,6 +49,15 @@ const router = createBrowserRouter([
       },
       {
         path:"/spot/:id", element:(<SpotDetails />)
+      },
+      {
+        path:"/spot/update/:id", element:(<UpdateSpot />)
+      },
+      {
+        path:"/spot/new", element:(<CreateSpot />)
+      },
+       {
+        path:"/spot/manage", element:(<ManageSpots />)
       }
     ]
   }
