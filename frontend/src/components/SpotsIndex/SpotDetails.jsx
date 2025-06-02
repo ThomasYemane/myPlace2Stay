@@ -5,9 +5,12 @@ import "./SpotDetails.css"
 import "react-gallery-carousel/dist/index.css";
 import Rating from "react-rating";
 import { FaStar } from "react-icons/fa";
+import { Button } from 'react-bootstrap';
+import { useSelector} from 'react-redux';
 
 function SpotDetails(){
     const [data, setData] = useState(null);
+    const sessionUser = useSelector(state => state.session.user);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [spotImages, setSpotImages] = useState(null);
@@ -58,6 +61,11 @@ function SpotDetails(){
             fullSymbol={<FaStar color="gold" />}
             fractions={2}
             /><span>&nbsp;{data.avgStarRating==="NaN"?"New":data.avgStarRating}&nbsp;{data.numReviews==0?"":"\u00B7 "+data.numReviews}&nbsp;{data.numReviews==0?"":data.numReviews==1?"Review":"Reviews"}</span>
+       <div>
+        {  sessionUser && sessionUser.id != data.ownerId && 
+            <Button>Post Your Review</Button>
+        }
+       </div>
     </div>  
     <br/>
     <Carousel images={spotImages} style={{height:400, width: 600, backgroundColor:'#a6d9ec'}} isMaximized={false} hasMediaButton={false}

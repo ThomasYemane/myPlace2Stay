@@ -21,9 +21,9 @@ function CreateSpot(){
     //const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const navigate = useNavigate();
 
-    const postImage = async (image, id) => {
+    const postImage = async (image, spotId) => {
         try{
-            const response = await fetch(import.meta.env.VITE_BACKEND_URL+'/api/spots/'+id+'/images', {
+            const response = await fetch(import.meta.env.VITE_BACKEND_URL+'/api/spots/'+spotId+'/images', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -67,13 +67,16 @@ function CreateSpot(){
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const jsonData = await response.json();
-                const id = jsonData.id;
-                postImage({url:image1, preview:true}, id);
-                if(image2) postImage({url:image2, preview:false}, id);
-                if(image3) postImage({url:image3, preview:false}, id);
-                if(image4) postImage({url:image4, preview:false}, id);
-                if(image5) postImage({url:image5, preview:false}, id);
-               navigate('/spot/'+id);
+                alert(jsonData.id);
+                postImage({url:image1, preview:true}, jsonData.id).then(()=>{
+                      if(image2) postImage({url:image2, preview:false}, jsonData.id);
+                      if(image3) postImage({url:image3, preview:false}, jsonData.id);
+                      if(image4) postImage({url:image4, preview:false}, jsonData.id);
+                      if(image5) postImage({url:image5, preview:false}, jsonData.id);
+                }).then(()=>{
+                  navigate('/spot/'+jsonData.id);
+                });
+               
             } catch (err) {
                 setErrors(err);
             } 
