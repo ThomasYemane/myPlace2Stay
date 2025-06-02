@@ -1,10 +1,12 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import ProfileButton from './ProfileButton';
+import { useNavigate } from 'react-router-dom';
 import './Navigation.css';
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector(state => state.session.user);
+  const navigate = useNavigate();
   useDispatch();
 
   return (
@@ -16,7 +18,11 @@ function Navigation({ isLoaded }) {
                 {isLoaded && (
                   <ProfileButton user={sessionUser} />
                   )}
+                  {sessionUser && (
+                    <button onClick={()=>{navigate('/spot/new')}}>Create a New Spot</button>
+             )}
           </div>
+           
     </div>
   );
 }

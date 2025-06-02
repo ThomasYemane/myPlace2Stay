@@ -1,93 +1,163 @@
-import { useEffect, useState} from 'react';
-import { useParams } from 'react-router-dom';
-import Carousel from "react-gallery-carousel";
-import "./SpotDetails.css"
-import "react-gallery-carousel/dist/index.css";
-import Rating from "react-rating";
-import { FaStar } from "react-icons/fa";
+import { useState} from 'react';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
-function SpotDetails(){
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [spotImages, setSpotImages] = useState(null);
-    const {id} = useParams();
+function CreateSpot(){
+    const [country, setCountry] = useState("");
+    const [address, setAddress] = useState("");
+    const [city, setCity] = useState("");
+    const [state, setState] = useState("");
+    const [lng, setLng] = useState("");
+    const [lat, setLat] = useState("");
+    const [description, setDescription] = useState("");
+    const [name, setName] = useState("");
+    const [price, setPrice] = useState("");
+    const [image1, setImage1] = useState("");
+    const [image2, setImage2] = useState("");
+    const [image3, setImage3] = useState("");
+    const [image4, setImage4] = useState("");
+    const [image5, setImage5] = useState("");
+    const [errors, setErrors] = useState({});
+    //const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+    const navigate = useNavigate();
 
-    
-    useEffect(() => {
-                const fetchData = async () => {
-                try {
-                    const response = await fetch(import.meta.env.VITE_BACKEND_URL+'/api/spots/'+id);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    const jsonData = await response.json();
-                    let newImages = jsonData.SpotImages.map((spotImage)=>({
-                        src: spotImage.url
-                    }));
-                    setSpotImages(newImages);
-                    setData(jsonData);
-                } catch (err) {
-                    setError(err);
-                } finally {
-                    setLoading(false);
+    const postImage = async (image, id) => {
+        try{
+            const response = await fetch(import.meta.env.VITE_BACKEND_URL+'/api/spots/'+id+'/images', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'XSRF-Token': Cookies.get('XSRF-TOKEN')
+            },
+            credentials: 'include',
+            body: JSON.stringify({url: image.url, preview: image.preview})
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        }catch(err){
+                setErrors(err);
+        }
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const postData = async () => {
+             try {
+                const response = await fetch(import.meta.env.VITE_BACKEND_URL+'/api/spots', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'XSRF-Token': Cookies.get('XSRF-TOKEN')
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    country,
+                    address,
+                    city,
+                    state,
+                    lng,
+                    lat,
+                    description,
+                    name,
+                    price})
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
                 }
-                };
+                const jsonData = await response.json();
+                const id = jsonData.id;
+                postImage({url:image1, preview:true}, id);
+                if(image2) postImage({url:image2, preview:false}, id);
+                if(image3) postImage({url:image3, preview:false}, id);
+                if(image4) postImage({url:image4, preview:false}, id);
+                if(image5) postImage({url:image5, preview:false}, id);
+               navigate('/spot/'+id);
+            } catch (err) {
+                setErrors(err);
+            } 
 
-                fetchData();
-  }, []);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
-
-  return (
+        };
+        postData();
+    };
+      return (
     <>
-    <div className='spotDetails'>
-      <h1>{data.name}</h1>
-      <h1>Location: {data.city}, {data.state}, {data.country}</h1>
-      <h1>Reviews: </h1>
-     <Rating
-            initialRating={data.avgStarRating}
-            readonly
-            emptySymbol={<FaStar color="gray" />}
-            fullSymbol={<FaStar color="gold" />}
-            fractions={2}
-            /><span>&nbsp;{data.avgStarRating==="NaN"?"New":data.avgStarRating}&nbsp;{data.numReviews==0?"":"\u00B7 "+data.numReviews}&nbsp;{data.numReviews==0?"":data.numReviews==1?"Review":"Reviews"}</span>
-    </div>  
-    <br/>
-    <Carousel images={spotImages} style={{height:400, width: 600, backgroundColor:'#a6d9ec'}} isMaximized={false} hasMediaButton={false}
-    hasSizeButton={false} thumbnailWidth="25%" thumbnailHeight="25%" hasIndexBoard={false} hasRightButton={false}
-    hasLeftButton={false}/>
-    <br/>
-    <p>Hosted By: {data.Owner.firstName} {data.Owner.lastName}</p>
-    <p>{data.description}</p>
+      <h1>Create a New Spot</h1>
+      <form onSubmit={handleSubmit}>
 
-    <div className="callout">
-  <div className="callout-container">
+         <h2>Where&apos;s your place located?</h2>
 
-    <p>${data.price} per night</p>
-    <div>
-        <Rating
-            initialRating={data.avgStarRating}
-            readonly
-            emptySymbol={<FaStar color="gray" />}
-            fullSymbol={<FaStar color="gold" />}
-            fractions={2}
-            /><span>&nbsp;{data.avgStarRating==="NaN"?"New":data.avgStarRating}&nbsp;{data.numReviews==0?"":"\u00B7 "+data.numReviews}&nbsp;{data.numReviews==0?"":data.numReviews==1?"Review":"Reviews"}</span>
-    </div>
-    
-    <button onClick={()=>alert("Feature coming soon")}>Reserve</button>
-  </div>
-</div>
-    
+         <label>
+          Country
+          <input value={country} placeholder='Country' onChange={e => {setCountry(e.target.value); }} required />
+        </label>
+        {errors.country && <p>{errors.country}</p>}
+
+         <label>
+          Street Address
+          <input value={address} placeholder='Street Address' onChange={e => {setAddress(e.target.value); }} required />
+        </label>
+        {errors.address && <p>{errors.address}</p>}
+
+        <label>
+          City
+          <input value={city} placeholder='City' onChange={e => {setCity(e.target.value); }} required />
+        </label>
+        {errors.city && <p>{errors.city}</p>}
+
+        <label>
+          State
+          <input value={state} placeholder='State' onChange={e => {setState(e.target.value); }} required />
+        </label>
+        {errors.state && <p>{errors.state}</p>}
+        <label>
+          Longtitude
+          <input value={lng} placeholder='Longtitude' onChange={e => {setLng(e.target.value); }} required />
+        </label>
+        {errors.lng && <p>{errors.state}</p>}
+        <label>
+          Longtitude
+          <input value={lat} placeholder='Latitude' onChange={e => {setLat(e.target.value); }} required />
+        </label>
+        {errors.lat && <p>{errors.state}</p>}
+
+        
+        <h2>Describe your place to guests</h2>
+        <caption>Mention the best features of your space, any special amentities like fast wifi or parking, and what you love about the neighborhood.</caption>
+          <input value={description} placeholder="Please write at least 30 characters" onChange={e => {setDescription(e.target.value);}} required />
+        {errors.description && <p>{errors.description}</p>}
+
+       <h2>Create a title for your spot</h2>
+        <caption>Catch guests&apos; attention with a spot title that highlights what makes your place special.</caption>
+
+          <input value={name} placeholder='Name of your spot' onChange={e => {setName(e.target.value); }} required />
+        {errors.name && <p>{errors.name}</p>}
+
+        
+        <h2>Set a base price for your spot</h2>
+        <caption>Competitive pricing can help your listing stand out and rank higher in search results.</caption>
+        <input value={price} placeholder='Price per night (USD)' onChange={e => {setPrice(e.target.value); }} required />
+        {errors.price && <p>{errors.price}</p>}
+
+        <h2>Liven up your spot with photos</h2>
+        <caption>Submit a link to at least one photo to publish your spot.</caption>
+        <input value={image1} placeholder='Preview Image URL' onChange={e => {setImage1(e.target.value); }} required />
+        {errors.url && <p>{errors.url}</p>}
+         <input value={image2} placeholder='Image URL' onChange={e => {setImage2(e.target.value);}} />
+        {errors.url && <p>{errors.url}</p>}
+         <input value={image3} placeholder='Image URL' onChange={e => {setImage3(e.target.value); }}  />
+        {errors.url && <p>{errors.url}</p>}
+         <input value={image4} placeholder='Image URL' onChange={e => {setImage4(e.target.value); }}  />
+        {errors.url && <p>{errors.url}</p>}
+         <input value={image5} placeholder='Image URL' onChange={e => {setImage5(e.target.value); }}  />
+        {errors.url && <p>{errors.url}</p>}
+        
+
+        <button className='submitButton' type="submit">Create Spot</button>
+      </form>
     </>
   );
-
 }
 
-export default SpotDetails;
+export default CreateSpot;
