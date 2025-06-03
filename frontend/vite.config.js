@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => ({
   ],
   server: {
     proxy: {
-      '/api': 'http://localhost:8000'
+      '/api': 'https://myplace2stay.onrender.com'
     },
   }
 }));
