@@ -74,7 +74,7 @@ function UpdateSpot(){
                     setName(jsonData.name);
                     setPrice(jsonData.price);
                 } catch (err) {
-                    setErrors(err);
+                    setError(err);
                 } finally {
                     setLoading(false);
                 }

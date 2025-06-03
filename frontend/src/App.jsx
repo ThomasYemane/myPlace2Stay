@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { createBrowserRouter, RouterProvider, Outlet, useParams } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Outlet} from 'react-router-dom';
 import Navigation from './components/Navigation/Navigation';
 import Spot from './components/SpotsIndex/SpotsIndex';
 import SpotDetails from './components/SpotsIndex/SpotDetails';

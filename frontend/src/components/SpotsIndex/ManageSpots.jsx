@@ -37,7 +37,6 @@ function ManageSpots() {
   const [error, setError] = useState(null);
   const [show, setShow] = useState(false);
   const [popupCallback, setPopupCallback] = useState(() => {});
-  const [errors, setErrors] = useState({});
 
   const fetchData = async () => {
     try {
@@ -84,7 +83,7 @@ function ManageSpots() {
                 }
                 fetchData();
             } catch (err) {
-                setErrors(err);
+                setError(err);
             } 
 
         };
