@@ -40,7 +40,7 @@ function ManageSpots() {
 
   const fetchData = async () => {
     try {
-        const response = await fetch(import.meta.env.VITE_BACKEND_URL+'/api/spots/current', {
+        const response = await fetch('https://myplace2stay.onrender.com/api/spots/current', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ function ManageSpots() {
      openPopup(()=>{
           const deleteSpot = async () => {
               try {
-                const response = await fetch(import.meta.env.VITE_BACKEND_URL+'/api/spots/'+id, {
+                const response = await fetch('https://myplace2stay.onrender.com/api/spots/'+id, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',

@@ -16,7 +16,7 @@ const setSpots = (spots) => {
 // Thunk - Fetch All Spots
 export const fetchAllSpots = () => async (dispatch) => {
   try {
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/spots`);
+    const res = await fetch('https://myplace2stay.onrender.com/api/spots');
     if (res.ok) {
       const data = await res.json();
       dispatch(setSpots(data.Spots)); // extract the 'Spots' array

@@ -23,7 +23,7 @@ function CreateSpot(){
 
     const postImage = async (image, spotId) => {
         try{
-            const response = await fetch(import.meta.env.VITE_BACKEND_URL+'/api/spots/'+spotId+'/images', {
+            const response = await fetch('https://myplace2stay.onrender.com/api/spots/'+spotId+'/images', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ function CreateSpot(){
         e.preventDefault();
         const postData = async () => {
              try {
-                const response = await fetch(import.meta.env.VITE_BACKEND_URL+'/api/spots', {
+                const response = await fetch('https://myplace2stay.onrender.com/api/spots', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -20,7 +20,7 @@ function SpotDetails(){
     useEffect(() => {
                 const fetchData = async () => {
                 try {
-                    const response = await fetch(import.meta.env.VITE_BACKEND_URL+'/api/spots/'+id);
+                    const response = await fetch('https://myplace2stay.onrender.com/api/spots/'+id);
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
                     }
