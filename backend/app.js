@@ -20,7 +20,7 @@ app.use(express.json());
 
 if (!isProduction) {
   app.use(cors({
-       origin: ['http://localhost:5173', 'http://localhost:8000'],
+       origin: ['http://localhost:5173', 'https://myplace2stay.onrender.com'],
        credentials: true
      }));
 }
