@@ -67,7 +67,6 @@ function CreateSpot(){
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const jsonData = await response.json();
-                alert(jsonData.id);
                 postImage({url:image1, preview:true}, jsonData.id).then(()=>{
                       if(image2) postImage({url:image2, preview:false}, jsonData.id);
                       if(image3) postImage({url:image3, preview:false}, jsonData.id);
