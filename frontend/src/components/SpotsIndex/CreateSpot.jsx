@@ -2,6 +2,7 @@ import { useState} from 'react';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 
+
 function CreateSpot(){
     const [country, setCountry] = useState("");
     const [address, setAddress] = useState("");
