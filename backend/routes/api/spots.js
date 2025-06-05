@@ -243,3 +243,4 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async (req, res) =>
 });
 
 module.exports = router;
+//my spots needs debugging
