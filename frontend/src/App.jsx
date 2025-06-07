@@ -70,5 +70,3 @@ function App() {
 
 export default App;
 
-
-// my render live link - https://myplace2stay.onrender.com
