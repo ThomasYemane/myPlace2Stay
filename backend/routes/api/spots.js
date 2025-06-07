@@ -83,7 +83,7 @@ router.get('/current', requireAuth, async (req, res) => {
   res.json({ Spots: formattedSpots });
 });
 
-// ✅ GET /api/spots/:id - Spot details (fix for the 404 error)
+// GET /api/spots/:id - Spot details
 router.get('/:id', async (req, res) => {
   const spotId = req.params.id;
 
@@ -126,5 +126,25 @@ router.get('/:id', async (req, res) => {
 
   res.json(spotData);
 });
+
+// DELETE /api/spots/:id - Delete a spot
+router.delete('/:id', requireAuth, async (req, res) => {
+  const spotId = req.params.id;
+  const userId = req.user.id;
+
+  const spot = await Spot.findByPk(spotId);
+
+  if (!spot) {
+    return res.status(404).json({ message: "Spot couldn't be found" });
+  }
+
+  if (spot.ownerId !== userId) {
+    return res.status(403).json({ message: "Forbidden" });
+  }
+
+  await spot.destroy();
+  return res.json({ message: "Successfully deleted" });
+});
+  
 
 module.exports = router;
