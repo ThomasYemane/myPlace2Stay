@@ -83,4 +83,7 @@ router.get('/current', requireAuth, async (req, res) => {
   res.json({ Spots: formattedSpots });
 });
 
+module.exports = router; 
+
+
 // The rest of your routes (get by id, post, put, delete, image upload, reviews...) remain unchanged.
