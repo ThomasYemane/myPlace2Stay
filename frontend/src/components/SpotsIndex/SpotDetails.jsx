@@ -18,27 +18,28 @@ function SpotDetails(){
 
     
     useEffect(() => {
-                const fetchData = async () => {
-                try {
-                    const response = await fetch('https://myplace2stay.onrender.com/api/spots/'+id);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                    const jsonData = await response.json();
-                    let newImages = jsonData.SpotImages.map((spotImage)=>({
-                        src: spotImage.url
-                    }));
-                    setSpotImages(newImages);
-                    setData(jsonData);
-                } catch (err) {
-                    setError(err);
-                } finally {
-                    setLoading(false);
-                }
-                };
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`https://myplace2stay.onrender.com/api/spots/${id}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const jsonData = await response.json();
+      let newImages = jsonData.SpotImages.map((spotImage) => ({
+        src: spotImage.url
+      }));
+      setSpotImages(newImages);
+      setData(jsonData);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-                fetchData();
-  }, []);
+  fetchData();
+}, [id]); 
+
 
   if (loading) {
     return <p>Loading...</p>;
