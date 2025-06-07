@@ -83,7 +83,48 @@ router.get('/current', requireAuth, async (req, res) => {
   res.json({ Spots: formattedSpots });
 });
 
-module.exports = router; 
+// ✅ GET /api/spots/:id - Spot details (fix for the 404 error)
+router.get('/:id', async (req, res) => {
+  const spotId = req.params.id;
 
+  const spot = await Spot.findByPk(spotId, {
+    include: [
+      {
+        model: SpotImage,
+        attributes: ['id', 'url', 'preview']
+      },
+      {
+        model: User,
+        as: 'Owner',
+        attributes: ['id', 'firstName', 'lastName']
+      },
+      {
+        model: Review,
+        attributes: []
+      }
+    ],
+    attributes: {
+      include: [
+        [Sequelize.fn('COUNT', Sequelize.col('Reviews.id')), 'numReviews'],
+        [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgStarRating']
+      ]
+    },
+    group: ['Spot.id', 'SpotImages.id', 'Owner.id']
+  });
 
-// The rest of your routes (get by id, post, put, delete, image upload, reviews...) remain unchanged.
+  if (!spot) {
+    return res.status(404).json({
+      title: 'Resource Not Found',
+      message: "The requested resource couldn't be found.",
+      errors: ["The requested resource couldn't be found."]
+    });
+  }
+
+  const spotData = spot.toJSON();
+  spotData.numReviews = parseInt(spotData.numReviews) || 0;
+  spotData.avgStarRating = parseFloat(spotData.avgStarRating) || 0;
+
+  res.json(spotData);
+});
+
+module.exports = router;
