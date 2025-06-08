@@ -10,7 +10,7 @@ import ManageSpots from './components/SpotsIndex/ManageSpots';
 import * as sessionActions from './store/session';
 import './App.css';
 
-// ✅ Layout component with session restoration
+// Layout component with session restoration
 function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -24,12 +24,12 @@ function Layout() {
   return (
     <>
       <Navigation isLoaded={isLoaded} />
-      {isLoaded && <Outlet />}
+      <Outlet />
     </>
   );
 }
 
-// ✅ App routes
+// App routes
 const router = createBrowserRouter([
   {
     element: <Layout />,
@@ -69,4 +69,3 @@ function App() {
 }
 
 export default App;
-
