@@ -21,6 +21,11 @@ function SpotsIndex() {
     dispatch(fetchAllSpots());
   }, [dispatch]);
 
+  // Debug logs to see what's happening
+  console.log("Spots state:", spots);
+  console.log("Spots keys length:", Object.keys(spots || {}).length);
+  console.log("SpotsArr:", spotsArr);
+
   if (!spots || Object.keys(spots).length === 0) {
     return <h2>Loading...</h2>;
   }
