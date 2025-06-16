@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import "./SpotDetails.css"
 import Rating from "react-rating";
 import { FaStar } from "react-icons/fa";
-import { Button } from 'react-bootstrap';
 import { useSelector} from 'react-redux';
 import API_BASE_URL from '../../config/index';
 
@@ -15,7 +14,6 @@ function formatDate(dateString) {
 
 function SpotDetails(){
     const [data, setData] = useState(null);
-    const sessionUser = useSelector(state => state.session.user);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [reviews, setReviews] = useState(null);
@@ -86,7 +84,7 @@ function SpotDetails(){
    
     <br/>
     <div className="detailContainer">
-            <div class="details">
+            <div className="details">
                   <p>Hosted By: {data.Owner.firstName} {data.Owner.lastName}</p>
                   <p>{data.description}</p>
           </div>
