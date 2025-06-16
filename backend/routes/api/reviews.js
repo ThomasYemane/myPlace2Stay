@@ -18,6 +18,23 @@ const validateReview = [
     .withMessage('Stars must be an integer from 1 to 5'),
   handleValidationErrors
 ];
+// GET /api/spotId
+router.get('/:spotId', async (req, res) => {
+  const { spotId } = req.params;
+
+  const reviews = await Review.findAll({
+    where: { spotId },
+    include: [
+      {
+        model: User,
+        attributes: ['id', 'firstName', 'lastName']
+      }
+    ]
+  });
+  //const reviewsData = reviews.toJSON();
+
+  res.json(reviews);
+});
 
 // GET /api/reviews/current
 router.get('/current', requireAuth, async (req, res) => {

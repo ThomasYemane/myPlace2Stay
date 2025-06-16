@@ -127,6 +127,133 @@ router.get('/:id', async (req, res) => {
   res.json(spotData);
 });
 
+  // POST /api/spots - Create a new spot
+router.post('/', requireAuth, validateSpot, async (req, res) => {
+    try {
+      const {
+        address,
+        city,
+        state,
+        country,
+        lat,
+        lng,
+        name,
+        description,
+        price
+      } = req.body;
+  
+      const ownerId = req.user.id;
+  
+      const newSpot = await Spot.create({
+        ownerId,
+        address,
+        city,
+        state,
+        country,
+        lat,
+        lng,
+        name,
+        description,
+        price
+      });
+  
+      res.status(201).json(newSpot);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+  // POST /api/spots/:id/images - Upload an image for a spot
+router.post('/:id/images', requireAuth, async (req, res) => {
+    try {
+      const { id } = req.params;  // Spot ID from route parameter
+      const { url, preview } = req.body;  // Image data from the request body
+  
+      // Find the spot by ID
+      const spot = await Spot.findByPk(id);
+  
+      if (!spot) {
+        return res.status(404).json({ message: 'Spot not found' });
+      }
+  
+      // Check if the current user is the owner of the spot
+      if (spot.ownerId !== req.user.id) {
+        return res.status(403).json({ message: 'Forbidden: You are not the owner of this spot' });
+      }
+  
+      // Create the new image for the spot
+      const newImage = await SpotImage.create({
+        spotId: spot.id,
+        url,
+        preview: preview || false,  // Default to false if no preview field is provided
+      });
+  
+      // Return the new image information in the response
+      return res.status(201).json({
+        id: newImage.id,
+        spotId: newImage.spotId,
+        url: newImage.url,
+        preview: newImage.preview,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+  // PUT /api/spots/:id - Update spot details
+router.put('/:id', requireAuth, validateSpot, async (req, res) => {
+    try {
+      const { id } = req.params;  // Spot ID from route parameter
+      const { address, city, state, country, lat, lng, name, description, price } = req.body;
+  
+      // Find the spot by ID
+      const spot = await Spot.findByPk(id);
+  
+      if (!spot) {
+        return res.status(404).json({ message: 'Spot not found' });
+      }
+  
+      // Check if the current user is the owner of the spot
+      if (spot.ownerId !== req.user.id) {
+        return res.status(403).json({ message: 'Forbidden: You are not the owner of this spot' });
+      }
+  
+      // Update the spot with the new data
+      spot.address = address;
+      spot.city = city;
+      spot.state = state;
+      spot.country = country;
+      spot.lat = lat;
+      spot.lng = lng;
+      spot.name = name;
+      spot.description = description;
+      spot.price = price;
+  
+      // Save the updated spot
+      await spot.save();
+  
+      // Return the updated spot information
+      return res.json({
+        id: spot.id,
+        ownerId: spot.ownerId,
+        address: spot.address,
+        city: spot.city,
+        state: spot.state,
+        country: spot.country,
+        lat: spot.lat,
+        lng: spot.lng,
+        name: spot.name,
+        description: spot.description,
+        price: spot.price
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
 // DELETE /api/spots/:id - Delete a spot
 router.delete('/:id', requireAuth, async (req, res) => {
   const spotId = req.params.id;

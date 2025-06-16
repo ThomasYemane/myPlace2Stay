@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import API_BASE_URL from '../../config/index';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -24,7 +25,7 @@ function CreateSpot() {
 
   const postImage = async (image, spotId) => {
     try {
-      const response = await fetch(`${API_BASE}/api/spots/${spotId}/images`, {
+      const response = await fetch(`${API_BASE_URL}/api/spots/${spotId}/images`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

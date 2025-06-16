@@ -1,6 +1,7 @@
 import { useEffect, useState} from 'react';
 import Cookies from 'js-cookie';
 import { useNavigate, useParams } from 'react-router-dom';
+import API_BASE_URL from '../../config/index';
 
 function UpdateSpot(){
     const [country, setCountry] = useState("");
@@ -18,6 +19,7 @@ function UpdateSpot(){
     //const [isButtonDisabled, setIsButtonDisabled] = useState(true);
     const navigate = useNavigate();
     const {id} = useParams();
+    
 
     
 
@@ -25,7 +27,7 @@ function UpdateSpot(){
         e.preventDefault();
         const postData = async () => {
              try {
-                const response = await fetch('https://myplace2stay.onrender.com/api/spots/'+id, {
+                const response = await fetch(`${API_BASE_URL}/api/spots/`+id, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -59,7 +61,7 @@ function UpdateSpot(){
      useEffect(() => {
                 const fetchData = async () => {
                 try {
-                    const response = await fetch('https://myplace2stay.onrender.com/api/spots/'+id);
+                    const response = await fetch(`${API_BASE_URL}/api/spots/`+id);
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
                     }

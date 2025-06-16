@@ -4,6 +4,8 @@ import Rating from "react-rating";
 import { FaStar } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { fetchAllSpots } from '../../store/spots';
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
 import "./SpotsIndex.css"
 
 function SpotsIndex() {
@@ -31,12 +33,13 @@ function SpotsIndex() {
   }
 
   return (
-    <div>
+    <div className="main">
+     
       <h1>All Spots</h1>
+       
         <div className="container">
         {spotsArr.map(spot => (
-          <div key={spot.id} ref={spotRef} id={spot.id} onClick={()=>handleClick(spot.id)}>
-            <h3>{spot.name}</h3>
+          <div className="tile" key={spot.id} ref={spotRef} id={spot.id} onClick={()=>handleClick(spot.id)}  data-tooltip-id="my-tooltip" data-tooltip-content={spot.name}>
             {spot.previewImage && (
               <img  id={spot.id}  src={spot.previewImage} alt={spot.name} width="200"/>
             )}
@@ -52,6 +55,7 @@ function SpotsIndex() {
           </div>
         ))}
         </div>
+        <Tooltip id="my-tooltip" />
     </div>
   );
 }

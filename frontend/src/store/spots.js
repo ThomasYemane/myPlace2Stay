@@ -1,3 +1,5 @@
+import API_BASE_URL from '../config/index';
+
 const SET_SPOTS = 'spots/setSpots';
 
 const setSpots = (spots) => {
@@ -13,7 +15,7 @@ const setSpots = (spots) => {
 
 export const fetchAllSpots = () => async (dispatch) => {
   try {
-const res = await fetch('http://localhost:8000/api/spots');
+const res = await fetch(`${API_BASE_URL}/api/spots`);
     if (res.ok) {
       const data = await res.json();
       dispatch(setSpots(data.Spots)); 

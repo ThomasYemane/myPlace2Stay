@@ -1,9 +1,20 @@
+.spotDetails{
+  margin-left: 5%;
+}
+
+.detailContainer{
+  width: 100vw;
+  display: flex;
+}
+.details{
+   margin-right: auto;
+}
 .callout {
-  position: fixed;
-  bottom: 35px;
-  right: 20px;
-  margin-left: 20px;
-  max-width: 300px;
+  display: flex;
+  flex-direction: row;
+  margin-right: 10%;
+  flex-wrap: nowrap;
+  justify-content:space-evenly;
 }
 
 .callout-container {
@@ -16,4 +27,55 @@ p{
     color:black;
     padding-top: 5px;
     padding-bottom: 5px;
+}
+
+.outer {
+  width: 95vw;
+  display: flex;
+  gap: 20px;
+ 
+}
+
+
+.big {
+  flex: 0 0 45vw; 
+  height: 41vw;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+.big:hover {
+    transform: scale(1.05);
+}
+.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  
+}
+.small {
+  flex: 0 0 22vw;
+  height: 20vw;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+.small:hover {
+    transform: scale(1.05);
+}
+.detailsImage {
+  width: 100%;
+  height: 100%; 
+  object-fit: fill;
+}
+
+.break { 
+    background: #000000;
+    height: 2px;
+    margin: 5px 0 10px 0;
+    width: 95vw;
 }

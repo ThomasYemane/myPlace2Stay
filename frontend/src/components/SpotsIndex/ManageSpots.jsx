@@ -5,7 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { Modal, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import Cookies from 'js-cookie';
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
 import "./SpotsIndex.css";
+import API_BASE_URL from '../../config/index';
 
 function ConfirmPopup({ show, onDelete, onKeep, message, loading }) {
   return (
@@ -50,10 +53,11 @@ function ManageSpots() {
 
   const fetchData = async () => {
   try {
-    const response = await fetch('http://localhost:8000/api/spots/current', {
+    const response = await fetch(`${API_BASE_URL}/api/spots/current`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'XSRF-Token': Cookies.get('XSRF-TOKEN')
       },
       credentials: 'include'
     });
@@ -87,7 +91,7 @@ function ManageSpots() {
     setDeleteLoading(true);
     
     try {
-      const response = await fetch(`http://localhost:8000/api/spots/${currentSpotId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/spots/${currentSpotId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -134,16 +138,16 @@ function ManageSpots() {
   }
 
   return (
-    <div>
+    <div className='main'>
       {!isEmpty && (
         <div>
           <h1>All Spots</h1>
           <div className="container">
             {spotsArr.map(spot => (
-              <div key={spot.id} id={spot.id}>
+              <div  className="tile" key={spot.id} id={spot.id} data-tooltip-id="my-tooltip" data-tooltip-content={spot.name}>
                 <h3>{spot.name}</h3>
                 {spot.previewImage && (
-                  <img id={spot.id} src={spot.previewImage} alt={spot.name} width="200"/>
+                  <img id={spot.id} src={spot.previewImage} alt={spot.name} width="200" />
                 )}
                 <p>{spot.city}, {spot.state}</p>
                 <p>${spot.price} per night</p>
@@ -177,6 +181,7 @@ function ManageSpots() {
           />
         </div>
       )}
+       <Tooltip id="my-tooltip" />
     </div>
   );
 }
