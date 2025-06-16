@@ -66,3 +66,5 @@ const requireAuth = (req, _res, next) => {
 };
 
 module.exports = { setTokenCookie, restoreUser, requireAuth };
+
+

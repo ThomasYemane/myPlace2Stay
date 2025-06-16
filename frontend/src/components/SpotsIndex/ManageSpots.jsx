@@ -49,15 +49,14 @@ function ManageSpots() {
   const [currentSpotId, setCurrentSpotId] = useState(null);
 
   const fetchData = async () => {
-    try {
-      const response = await fetch('https://myplace2stay.onrender.com/api/spots/current', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'XSRF-Token': Cookies.get('XSRF-TOKEN')
-        },
-        credentials: 'include'
-      });
+  try {
+    const response = await fetch('http://localhost:8000/api/spots/current', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include'
+    });
       
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -88,7 +87,7 @@ function ManageSpots() {
     setDeleteLoading(true);
     
     try {
-      const response = await fetch(`https://myplace2stay.onrender.com/api/spots/${currentSpotId}`, {
+      const response = await fetch(`http://localhost:8000/api/spots/${currentSpotId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

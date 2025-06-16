@@ -145,6 +145,5 @@ router.delete('/:id', requireAuth, async (req, res) => {
   await spot.destroy();
   return res.json({ message: "Successfully deleted" });
 });
-  
 
 module.exports = router;
