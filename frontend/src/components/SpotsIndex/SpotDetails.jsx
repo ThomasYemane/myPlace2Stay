@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import "./SpotDetails.css"
 import Rating from "react-rating";
 import { FaStar } from "react-icons/fa";
-import { useSelector} from 'react-redux';
 import API_BASE_URL from '../../config/index';
 
 function formatDate(dateString) {
@@ -108,7 +107,7 @@ function SpotDetails(){
 </div>
 
     </div>
-    <div class="break"></div>
+    <div className="break"></div>
     <h1>Reviews: </h1>
      <Rating
             initialRating={data.avgStarRating}
