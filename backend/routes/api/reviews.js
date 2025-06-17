@@ -78,40 +78,22 @@ router.get('/current', requireAuth, async (req, res) => {
   res.json({ Reviews: formatted });
 });
 
-// POST /api/reviews/:reviewId/images
-router.post('/:reviewId/images', requireAuth, async (req, res, next) => {
-  const { reviewId } = req.params;
-  const { url } = req.body;
-
-  const review = await Review.findByPk(reviewId);
-
-  if (!review) {
-    return res.status(404).json({ message: "Review couldn't be found" });
-  }
-
-  if (review.userId !== req.user.id) {
-    return res.status(403).json({ message: 'Forbidden' });
-  }
-
-  const imagesCount = await ReviewImage.count({
-    where: { reviewId }
-  });
-
-  if (imagesCount >= 10) {
-    return res.status(403).json({
-      message: 'Maximum number of images for this resource was reached'
-    });
-  }
-
-  const newImage = await ReviewImage.create({
-    reviewId,
-    url
-  });
-
-  res.status(201).json({
-    id: newImage.id,
-    url: newImage.url
-  });
+// POST /api/reviews
+router.post('/', requireAuth, async (req, res, next) => {
+  try{
+     const userId = req.user.id;
+      const { spotId, review, stars } = req.body;
+      await Review.create({
+        spotId,
+        userId,
+        review,
+        stars
+      });
+    return res.status(201);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error' });
+    }
 });
 
 // PUT /api/reviews/:reviewId - Edit review

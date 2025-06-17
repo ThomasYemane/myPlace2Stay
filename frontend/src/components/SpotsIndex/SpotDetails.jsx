@@ -1,9 +1,12 @@
 import { useEffect, useState} from 'react';
+import Cookies from 'js-cookie';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import "./SpotDetails.css"
 import Rating from "react-rating";
 import { FaStar } from "react-icons/fa";
 import API_BASE_URL from '../../config/index';
+import Modal from 'react-modal';
 
 function formatDate(dateString) {
   const date = new Date(dateString);
@@ -11,14 +14,55 @@ function formatDate(dateString) {
   return formattedDate;
 }
 
+const modalStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
+
 function SpotDetails(){
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [errors, setErrors] = useState(null);
     const [reviews, setReviews] = useState(null);
+    const [review, setReview] = useState(null);
+    const [stars, setStars] = useState(0);
+    const sessionUser = useSelector(state => state.session.user);
+    const [modalIsOpen, setIsOpen] = useState(false);
     const {id} = useParams();
 
-    
+    function openModal() {
+      setIsOpen(true);
+    }
+
+    function closeModal() {
+      setIsOpen(false);
+    }
+
+
+    const postReview = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/reviews`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'XSRF-Token': Cookies.get('XSRF-TOKEN')
+        },
+        credentials: 'include',
+        body: JSON.stringify({ spotId: data.id, review: review, stars: Math.trunc(stars) })
+      });
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    } catch (err) {
+      setErrors({ ...errors, image: err.message });
+    }
+  };
+
     useEffect(() => {
   const fetchData = async () => {
     try {
@@ -116,6 +160,33 @@ function SpotDetails(){
             fullSymbol={<FaStar color="gold" />}
             fractions={2}
             /><span>&nbsp;{data.avgStarRating==="NaN"?"New":data.avgStarRating}&nbsp;{data.numReviews==0?"":"\u00B7 "+data.numReviews}&nbsp;{data.numReviews==0?"":data.numReviews==1?"Review":"Reviews"}</span>
+      <div>
+        {
+          sessionUser && sessionUser.id!==data.ownerId && 
+           <button onClick={openModal}>Post your review</button>
+          
+        }
+        <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={closeModal}
+        style={modalStyles}
+      >
+        
+        <button onClick={closeModal}>close</button>
+        <div>How was your stay?</div>
+        <form onSubmit={postReview}>
+          <textarea  value={review}  onChange={e => setReview(e.target.value)} placeholder='Leave your review here ...' rows="5" cols="75"/>
+           <Rating
+            value={stars}
+            onChange={(value) => setStars(value)}
+            emptySymbol={<FaStar color="gray" />}
+            fullSymbol={<FaStar color="gold" />}
+            fractions={2}
+            />
+          <button type="submit">Submit Your Review</button>
+        </form>
+      </Modal>
+      </div>
        <div>
           {(() => {
                       const arr = [];
