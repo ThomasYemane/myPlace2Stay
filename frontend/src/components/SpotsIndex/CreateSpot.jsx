@@ -3,8 +3,6 @@ import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import API_BASE_URL from '../../config/index';
 
-const API_BASE = import.meta.env.VITE_API_URL || '';
-
 function CreateSpot() {
   const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
@@ -44,7 +42,7 @@ function CreateSpot() {
     e.preventDefault();
     const postData = async () => {
       try {
-        const response = await fetch(`${API_BASE}/api/spots`, {
+        const response = await fetch(`${API_BASE_URL}/api/spots`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

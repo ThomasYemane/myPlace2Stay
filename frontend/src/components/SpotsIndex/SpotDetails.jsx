@@ -60,7 +60,7 @@ function SpotDetails(){
     <br/>
     <div className='outer'>
           <div className='big'>
-          <img className="detailsImage" src={data.SpotImages[0].url}></img>
+          {data.SpotImages.length>0 && <img className="detailsImage" src={data.SpotImages[0].url}></img>}
               </div>
             <div className='wrap'>
 
