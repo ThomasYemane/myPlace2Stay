@@ -7,6 +7,7 @@ const csurf = require('csurf');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const routes = require('./routes');
+const { sequelize } = require('./db/models');
 
 const { environment } = require('./config/config');
 const isProduction = environment === 'production';
@@ -23,6 +24,9 @@ if (!isProduction) {
        origin: ['http://localhost:5173', 'https://myplace2stay.onrender.com'],
        credentials: true
      }));
+}
+if(isProduction){
+  sequelize.sync();
 }
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(
