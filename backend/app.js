@@ -26,7 +26,7 @@ if (!isProduction) {
      }));
 }
 if(isProduction){
-  await sequelize.sync({ force: true });
+  sequelize.sync({ force: true });
 }
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(
