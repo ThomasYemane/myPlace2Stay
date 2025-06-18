@@ -16,7 +16,7 @@ const validateSpot = [
   check('lat').isFloat({ min: -90, max: 90 }).withMessage('Latitude must be between -90 and 90'),
   check('lng').isFloat({ min: -180, max: 180 }).withMessage('Longitude must be between -180 and 180'),
   check('name').isLength({ min: 1, max: 50 }).withMessage('Name must be between 1 and 50 characters'),
-  check('description').notEmpty().withMessage('Description is required'),
+  check('description').isLength({ min: 30, max: 500 }).withMessage('Description must be between 30 and 500 characters'),
   check('price').isFloat({ min: 0 }).withMessage('Price must be a positive number'),
   handleValidationErrors
 ];
@@ -30,7 +30,8 @@ router.get('/', async (req, res) => {
     ],
     attributes: {
       include: [
-        [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgRating']
+        [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgRating'],
+        [Sequelize.fn('COUNT', Sequelize.col('Reviews.review')), 'numRating']
       ]
     },
     group: ['Spot.id', 'SpotImages.id'],
@@ -63,7 +64,8 @@ router.get('/current', requireAuth, async (req, res) => {
     ],
     attributes: {
       include: [
-        [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgRating']
+        [Sequelize.fn('AVG', Sequelize.col('Reviews.stars')), 'avgRating'],
+        [Sequelize.fn('COUNT', Sequelize.col('Reviews.review')), 'numRating']
       ]
     },
     group: ['Spot.id', 'SpotImages.id']

@@ -7,11 +7,44 @@ import Rating from "react-rating";
 import { FaStar } from "react-icons/fa";
 import API_BASE_URL from '../../config/index';
 import Modal from 'react-modal';
+import { Modal as Modal2, Button } from'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.css';
 
 function formatDate(dateString) {
   const date = new Date(dateString);
   const formattedDate = date.toLocaleString('default', { month: 'short', year: 'numeric' });
   return formattedDate;
+}
+
+function ConfirmPopup({ show, onDelete, onKeep, message, loading }) {
+  return (
+    <Modal2 show={show} onHide={onKeep}>
+      <Modal2.Header closeButton>
+        <Modal2.Title>Confirm Delete</Modal2.Title>
+      </Modal2.Header>
+      <Modal2.Body>
+        {message}
+      </Modal2.Body>
+      <Modal2.Footer>
+        <Button 
+          style={{color:'red'}} 
+          variant="primary" 
+          onClick={onDelete}
+          disabled={loading}
+        >
+          {loading ? 'Deleting...' : 'Yes (Delete Review)'}
+        </Button>
+        <Button 
+          style={{color:'grey'}} 
+          variant="secondary" 
+          onClick={onKeep}
+          disabled={loading}
+        >
+          No (Keep Review)
+        </Button>
+      </Modal2.Footer>
+    </Modal2>
+  );
 }
 
 const modalStyles = {
@@ -35,7 +68,49 @@ function SpotDetails(){
     const [stars, setStars] = useState(0);
     const sessionUser = useSelector(state => state.session.user);
     const [modalIsOpen, setIsOpen] = useState(false);
+    const [show, setShow] = useState(false);
+    const [deleteLoading, setDeleteLoading] = useState(false);
+    const [currentReviewId, setCurrentReviewId] = useState(null);
     const {id} = useParams();
+
+
+    const handleDeleteButton = (id) => {
+      setCurrentReviewId(id);
+      setShow(true);
+  };
+
+  const handleDelete = async () => {
+    if (!currentReviewId) return;
+    
+    setDeleteLoading(true);
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/reviews/${currentReviewId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'XSRF-Token': Cookies.get('XSRF-TOKEN')
+        },
+        credentials: 'include'
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+       setReviews(reviews.filter(review => review.id !== currentReviewId));
+    } catch (err) {
+      setError(err);
+    } finally {
+      setDeleteLoading(false);
+      setShow(false);
+      setCurrentReviewId(null);
+    }
+  };
+
+  const handleKeep = () => {
+    setShow(false);
+    setCurrentReviewId(null);
+  };
 
     function openModal() {
       setIsOpen(true);
@@ -110,7 +185,7 @@ function SpotDetails(){
 
               {(() => {
                       const arr = [];
-                      for (let i = 1; i < data.SpotImages.length; i++) {
+                      for (let i = 1; i < Math.min(5, data.SpotImages.length); i++) {
                           arr.push(
                               <div className='small'>
                                   <img className="detailsImage" src={data.SpotImages[i].url}></img>
@@ -143,7 +218,7 @@ function SpotDetails(){
                     emptySymbol={<FaStar color="gray" />}
                     fullSymbol={<FaStar color="gold" />}
                     fractions={2}
-                    /><span>&nbsp;{data.avgStarRating==="NaN"?"New":data.avgStarRating}&nbsp;{data.numReviews==0?"":"\u00B7 "+data.numReviews}&nbsp;{data.numReviews==0?"":data.numReviews==1?"Review":"Reviews"}</span>
+                    /><span>&nbsp;{data.avgStarRating==="NaN" || data.numReviews==0?"New":Math.round(data.avgStarRating*100)/100}&nbsp;{data.avgStarRating==="NaN" || data.numReviews==0?"":data.numReviews==1?"Review":"Reviews"}</span>
             </div>
             
             <button onClick={()=>alert("Feature coming soon")}>Reserve</button>
@@ -159,10 +234,10 @@ function SpotDetails(){
             emptySymbol={<FaStar color="gray" />}
             fullSymbol={<FaStar color="gold" />}
             fractions={2}
-            /><span>&nbsp;{data.avgStarRating==="NaN"?"New":data.avgStarRating}&nbsp;{data.numReviews==0?"":"\u00B7 "+data.numReviews}&nbsp;{data.numReviews==0?"":data.numReviews==1?"Review":"Reviews"}</span>
+            /><span>&nbsp;{data.avgStarRating==="NaN" || data.numReviews==0?"New":Math.round(data.avgStarRating*100)/100}&nbsp;{data.avgStarRating==="NaN" || data.numReviews==0?"":data.numReviews==1?"Review":"Reviews"}</span>
       <div>
         {
-          sessionUser && sessionUser.id!==data.ownerId && 
+          sessionUser && sessionUser.id!==data.ownerId && reviews.map(item=>item.User.id).find(id=>id==sessionUser.id)!==sessionUser.id &&
            <button onClick={openModal}>Post your review</button>
           
         }
@@ -195,7 +270,16 @@ function SpotDetails(){
                               <div>
                                   <p  style={{fontWeight:'bold'}} >{reviews[i].User.firstName}</p>
                                   <p>{formatDate(reviews[i].createdAt)}</p>
-                                  <p>{reviews[i].review}</p>
+                                  <div><span>{reviews[i].review}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                  {  sessionUser && sessionUser.id!==data.ownerId && sessionUser.id===reviews[i].User.id && <Button onClick={()=>handleDeleteButton(reviews[i].id)}>delete</Button>}
+                                        <ConfirmPopup
+                                            show={show}
+                                            onDelete={handleDelete}
+                                            onKeep={handleKeep}
+                                            message="Are you sure you want to delete this review?"
+                                            loading={deleteLoading} 
+                                          />
+                                  </div>
                               </div>
                           );
                       }

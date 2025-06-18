@@ -29,10 +29,12 @@ router.get('/:spotId', async (req, res) => {
         model: User,
         attributes: ['id', 'firstName', 'lastName']
       }
+    ],
+    order: [
+      ['updatedAt', 'DESC'] //sort
     ]
   });
-  //const reviewsData = reviews.toJSON();
-
+  
   res.json(reviews);
 });
 

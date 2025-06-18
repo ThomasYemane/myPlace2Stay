@@ -139,9 +139,10 @@ function ManageSpots() {
 
   return (
     <div className='main'>
+      {isEmpty && <a href="#" onClick={()=>{navigate('/spot/new')}}>Create a New Spot</a>}
       {!isEmpty && (
         <div>
-          <h1>All Spots</h1>
+          <h1>Manage Spots</h1>
           <div className="container">
             {spotsArr.map(spot => (
               <div  className="tile" key={spot.id} id={spot.id} data-tooltip-id="my-tooltip" data-tooltip-content={spot.name}>
@@ -158,7 +159,7 @@ function ManageSpots() {
                   fullSymbol={<FaStar color="gold" />}
                   fractions={2}
                 />
-                <span>   {spot.avgRating === "NaN" ? "New" : spot.avgRating}</span>
+               <span> {spot.avgRating==="NaN" || spot.numRating==0?"New":spot.avgRating}</span>
                 <div>
                   <div>
                     <Button onClick={() => handleUpdateButton(spot.id)}>Update</Button>

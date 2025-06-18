@@ -51,7 +51,7 @@ function SpotsIndex() {
               emptySymbol={<FaStar color="gray" />}
               fullSymbol={<FaStar color="gold" />}
               fractions={2}
-            /><span>   {spot.avgRating==="NaN"?"New":spot.avgRating}</span>
+            /><span> {spot.avgRating==="NaN" || spot.numRating==0?"New":spot.avgRating}</span>
           </div>
         ))}
         </div>

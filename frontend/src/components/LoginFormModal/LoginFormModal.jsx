@@ -26,6 +26,19 @@ function LoginFormModal() {
       });
   };
 
+  const demoUserLogin = (e) => {
+    e.preventDefault();
+    setError("");
+     return dispatch(sessionActions.login({ credential:"demo@gmail.com", password: "demo123"}))
+      .then(closeModal)
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setError(data.errors);
+        }
+      });
+  }
+
   return (
     <>
       <h1>Log In</h1>
@@ -52,6 +65,7 @@ function LoginFormModal() {
         )}
         <button className='submitButton' disabled={isButtonDisabled} type="submit">Log In</button>
       </form>
+       <a href="#" onClick={demoUserLogin}>Log in as Demo User</a>
     </>
   );
 }
