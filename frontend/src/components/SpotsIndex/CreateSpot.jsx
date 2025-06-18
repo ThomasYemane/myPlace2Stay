@@ -129,7 +129,7 @@ function CreateSpot() {
 
         <h2>Liven up your spot with photos</h2>
         <p>Submit at least one image URL.</p>
-        <input type='url' value={image1} placeholder='Preview Image URL' onChange={e => setImage1(e.target.value)} required />
+        <input type='url' value={image1} placeholder='Preview Image URL' onChange={e => setImage1(e.target.value)}/>
         <input type='url' value={image2} placeholder='Image URL' onChange={e => setImage2(e.target.value)} />
         <input type='url' value={image3} placeholder='Image URL' onChange={e => setImage3(e.target.value)} />
         <input type='url' value={image4} placeholder='Image URL' onChange={e => setImage4(e.target.value)} />
