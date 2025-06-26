@@ -139,10 +139,10 @@ function ManageSpots() {
 
   return (
     <div className='main'>
+       <h1>Manage Spots</h1>
       {isEmpty && <a href="#" onClick={()=>{navigate('/spot/new')}}>Create a New Spot</a>}
       {!isEmpty && (
         <div>
-          <h1>Manage Spots</h1>
           <div className="container">
             {spotsArr.map(spot => (
               <div  className="tile" key={spot.id} id={spot.id} data-tooltip-id="my-tooltip" data-tooltip-content={spot.name}>

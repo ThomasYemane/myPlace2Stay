@@ -97,7 +97,15 @@ function SpotDetails(){
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-       setReviews(reviews.filter(review => review.id !== currentReviewId));
+       const response1 = await fetch(`${API_BASE_URL}/api/spots/${id}`);
+      if (!response1.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const jsonData = await response1.json();
+      const reviewsRes = await fetch(`${API_BASE_URL}/api/reviews/${id}`);
+      const reviewsData = await reviewsRes.json();
+      setData(jsonData);
+      setReviews(reviewsData);
     } catch (err) {
       setError(err);
     } finally {
@@ -117,9 +125,13 @@ function SpotDetails(){
     }
 
     function closeModal() {
+      setReview(null);
       setIsOpen(false);
     }
 
+    const handleRating = (rate) => {
+      setStars(rate);
+    };
 
     const postReview = async () => {
     try {
@@ -218,7 +230,7 @@ function SpotDetails(){
                     emptySymbol={<FaStar color="gray" />}
                     fullSymbol={<FaStar color="gold" />}
                     fractions={2}
-                    /><span>&nbsp;{data.avgStarRating==="NaN" || data.numReviews==0?"New":Math.round(data.avgStarRating*100)/100}&nbsp;{data.avgStarRating==="NaN" || data.numReviews==0?"":data.numReviews==1?"Review":"Reviews"}</span>
+                    /><span>&nbsp;{data.avgStarRating==="NaN" || data.numReviews==0?"New":data.avgStarRating.toFixed(2)}&nbsp;{data.avgStarRating==="NaN" || data.numReviews==0?"":data.numReviews==1?"Review":"Reviews"}</span>
             </div>
             
             <button onClick={()=>alert("Feature coming soon")}>Reserve</button>
@@ -234,7 +246,7 @@ function SpotDetails(){
             emptySymbol={<FaStar color="gray" />}
             fullSymbol={<FaStar color="gold" />}
             fractions={2}
-            /><span>&nbsp;{data.avgStarRating==="NaN" || data.numReviews==0?"New":Math.round(data.avgStarRating*100)/100}&nbsp;{data.avgStarRating==="NaN" || data.numReviews==0?"":data.numReviews==1?"Review":"Reviews"}</span>
+            /><span>&nbsp;{data.avgStarRating==="NaN" || data.numReviews==0?"New":data.avgStarRating.toFixed(2)}&nbsp;{data.avgStarRating==="NaN" || data.numReviews==0?"":data.numReviews==1?"Review":"Reviews"}</span>
       <div>
         {
           sessionUser && sessionUser.id!==data.ownerId && reviews.map(item=>item.User.id).find(id=>id==sessionUser.id)!==sessionUser.id &&
@@ -253,7 +265,7 @@ function SpotDetails(){
           <textarea  value={review}  onChange={e => setReview(e.target.value)} placeholder='Leave your review here ...' rows="5" cols="75"/>
            <Rating
             value={stars}
-            onChange={(value) => setStars(value)}
+            onClick={handleRating}
             emptySymbol={<FaStar color="gray" />}
             fullSymbol={<FaStar color="gold" />}
             fractions={2}

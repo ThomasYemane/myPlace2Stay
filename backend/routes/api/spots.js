@@ -18,6 +18,8 @@ const validateSpot = [
   check('name').isLength({ min: 1, max: 50 }).withMessage('Name must be between 1 and 50 characters'),
   check('description').isLength({ min: 30, max: 500 }).withMessage('Description must be between 30 and 500 characters'),
   check('price').isFloat({ min: 0 }).withMessage('Price must be a positive number'),
+  check('url').notEmpty().withMessage('Preview image is required'),
+  check('url').isURL().withMessage('Image url must be valid'),
   handleValidationErrors
 ];
 
@@ -141,9 +143,11 @@ router.post('/', requireAuth, validateSpot, async (req, res) => {
         lng,
         name,
         description,
-        price
+        price,
+        images,
+        url
       } = req.body;
-  
+
       const ownerId = req.user.id;
   
       const newSpot = await Spot.create({
@@ -158,7 +162,20 @@ router.post('/', requireAuth, validateSpot, async (req, res) => {
         description,
         price
       });
-  
+
+      await SpotImage.create({
+          spotId: newSpot.id,
+          url,
+          preview: true, 
+      });
+
+     for(let i=0; i<images.length; i++){
+          await SpotImage.create({
+            spotId: newSpot.id,
+            url: images[i],
+            preview: false, 
+        });
+     }
       res.status(201).json(newSpot);
     } catch (error) {
       console.error(error);

@@ -14,36 +14,32 @@ function CreateSpot() {
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const[url, setUrl] = useState("");
   const [image1, setImage1] = useState("");
   const [image2, setImage2] = useState("");
   const [image3, setImage3] = useState("");
   const [image4, setImage4] = useState("");
-  const [image5, setImage5] = useState("");
   const [errors, setErrors] = useState("");
   const navigate = useNavigate();
-
-  const postImage = async (image, spotId) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/spots/${spotId}/images`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'XSRF-Token': Cookies.get('XSRF-TOKEN')
-        },
-        credentials: 'include',
-        body: JSON.stringify({ url: image.url, preview: image.preview })
-      });
-      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-    } catch (err) {
-      setErrors({ ...errors, image: err.message });
-    }
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors("");
     const postData = async () => {
       try {
+        const images = [];
+        if(URL.canParse(image1)){
+          images.push(image1);
+        }
+        if(URL.canParse(image2)){
+          images.push(image2);
+        }
+        if(URL.canParse(image3)){
+          images.push(image3);
+        }
+        if(URL.canParse(image4)){
+          images.push(image4);
+        }
         const response = await fetch(`${API_BASE_URL}/api/spots`, {
           method: 'POST',
           headers: {
@@ -52,22 +48,16 @@ function CreateSpot() {
           },
           credentials: 'include',
           body: JSON.stringify({
-            country, address, city, state, lng, lat, description, name, price
+            country, address, city, state, lng, lat, description, name, price, url,
+            'images': images
           })
         });
-
-        if (!response.ok){
-          const errorData = await response.json();
-          setErrors(errorData.errors);
-          } else {
+        if(response.status==201){
             const jsonData = await response.json();
-            await postImage({ url: image1, preview: true }, jsonData.id);
-            if (image2) await postImage({ url: image2, preview: false }, jsonData.id);
-            if (image3) await postImage({ url: image3, preview: false }, jsonData.id);
-            if (image4) await postImage({ url: image4, preview: false }, jsonData.id);
-            if (image5) await postImage({ url: image5, preview: false }, jsonData.id);
-
-             navigate('/spot/' + jsonData.id);
+            navigate('/spot/' + jsonData.id);
+        }else{
+            const errorData = await response.json();
+            setErrors(errorData.errors);
         }
       } catch (err) {
         console.error('Submission error:', err);
@@ -114,7 +104,7 @@ function CreateSpot() {
 
         <h2>Describe your place to guests</h2>
         <p>Mention features, amenities, and what you love about the neighborhood.</p>
-        <input value={description} placeholder="Write at least 30 characters" onChange={e => setDescription(e.target.value)} required />
+        <input value={description} placeholder="Write at least 30 characters" onChange={e => setDescription(e.target.value)} />
         {errors.description && <p className='error'>{errors.description}</p>}
 
         <h2>Create a title for your spot</h2>
@@ -129,11 +119,13 @@ function CreateSpot() {
 
         <h2>Liven up your spot with photos</h2>
         <p>Submit at least one image URL.</p>
-        <input type='url' value={image1} placeholder='Preview Image URL' onChange={e => setImage1(e.target.value)}/>
-        <input type='url' value={image2} placeholder='Image URL' onChange={e => setImage2(e.target.value)} />
-        <input type='url' value={image3} placeholder='Image URL' onChange={e => setImage3(e.target.value)} />
-        <input type='url' value={image4} placeholder='Image URL' onChange={e => setImage4(e.target.value)} />
-        <input type='url' value={image5} placeholder='Image URL' onChange={e => setImage5(e.target.value)} />
+        <input value={url} placeholder='Preview Image URL' onChange={e => setUrl(e.target.value)}/>
+         {errors.url && <p className='error'>{errors.url}</p>}
+        <input value={image1} placeholder='Image URL' onChange={e => setImage1(e.target.value)} />
+        <input value={image2} placeholder='Image URL' onChange={e => setImage2(e.target.value)} />
+        <input value={image3} placeholder='Image URL' onChange={e => setImage3(e.target.value)} />
+        <input value={image4} placeholder='Image URL' onChange={e => setImage4(e.target.value)} />
+        
 
         <button className='submitButton' type="submit">Create Spot</button>
       </form>
